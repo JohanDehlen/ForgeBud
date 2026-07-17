@@ -84,6 +84,23 @@ and validation status.
 
 ---
 
+## Project Dashboard State
+
+Status: Accepted
+
+`ProjectDashboard` composes ProjectInfo, ProjectContext, and
+ReleaseManifest state for presentation.
+
+ProjectController coordinates the existing services needed to build
+dashboard state.
+
+ProjectDashboardWidget only displays the supplied dashboard model.
+
+MainWindow owns dashboard widget composition and forwards dashboard
+state from the controller.
+
+---
+
 ## Development Policy
 
 Status: Accepted

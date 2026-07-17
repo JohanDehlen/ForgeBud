@@ -3,9 +3,14 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Protocol
 
+from models.project_dashboard import ProjectDashboard
 from models.project_info import ProjectInfo
+from services.context_service import ContextService
 from services.git_service import GitService
 from services.project_service import ProjectService
+from services.release_manifest_service import (
+    ReleaseManifestService,
+)
 from services.settings_service import SettingsService
 
 
@@ -44,6 +49,14 @@ class ProjectWindow(Protocol):
         Display the repository status.
         """
 
+    def set_project_dashboard(
+        self,
+        dashboard: ProjectDashboard,
+    ) -> None:
+        """
+        Display project dashboard state.
+        """
+
     def enable_initialize(self) -> None:
         """
         Enable project initialization.
@@ -66,7 +79,7 @@ class ProjectWindow(Protocol):
 class ProjectController:
     """
     Coordinates project selection, loading, initialization,
-    and recent-project presentation.
+    dashboard state, and recent-project presentation.
     """
 
     def __init__(self, window: ProjectWindow) -> None:
@@ -96,7 +109,7 @@ class ProjectController:
 
     def load_project(self, folder: str | Path) -> None:
         """
-        Load project and repository information for a folder.
+        Load project, repository, and dashboard information.
         """
         project_path = Path(folder)
 
@@ -114,9 +127,10 @@ class ProjectController:
 
         if ProjectService.is_initialized(self._project_path):
             self._load_initialized_project()
-            return
+        else:
+            self._show_uninitialized_project()
 
-        self._show_uninitialized_project()
+        self.refresh_project_dashboard()
 
     def initialize_project(self) -> None:
         """
@@ -153,6 +167,40 @@ class ProjectController:
         self._window.set_recent_projects(
             SettingsService.get_recent_projects()
         )
+
+    def refresh_project_dashboard(self) -> None:
+        """
+        Build and display the current project dashboard state.
+        """
+        if self._project_path is None:
+            self._window.set_project_dashboard(
+                ProjectDashboard()
+            )
+            return
+
+        is_initialized = ProjectService.is_initialized(
+            self._project_path
+        )
+
+        project_info = ProjectInfo()
+
+        if is_initialized:
+            project_info = ProjectService.load(
+                self._project_path
+            )
+
+        dashboard = ProjectDashboard(
+            project_info=project_info,
+            project_context=ContextService.build(
+                str(self._project_path)
+            ),
+            release_manifest=ReleaseManifestService.load(
+                self._project_path
+            ),
+            is_initialized=is_initialized,
+        )
+
+        self._window.set_project_dashboard(dashboard)
 
     def _update_repository_status(self) -> None:
         """

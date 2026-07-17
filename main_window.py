@@ -8,8 +8,10 @@ from PySide6.QtWidgets import (
 )
 
 from controllers.project_controller import ProjectController
+from models.project_dashboard import ProjectDashboard
 from models.project_info import ProjectInfo
 from version import APP_NAME, APP_VERSION
+from widgets.project_dashboard import ProjectDashboardWidget
 from widgets.project_panel import ProjectPanel
 from widgets.status_bar import StatusBar
 
@@ -31,6 +33,7 @@ class MainWindow(QMainWindow):
         self._connect_signals()
 
         self.projectController.refresh_recent_projects()
+        self.projectController.refresh_project_dashboard()
 
     def _create_ui(self) -> None:
         """
@@ -44,6 +47,9 @@ class MainWindow(QMainWindow):
 
         self.projectPanel = ProjectPanel()
         content_layout.addWidget(self.projectPanel)
+
+        self.projectDashboard = ProjectDashboardWidget()
+        content_layout.addWidget(self.projectDashboard)
 
         main_layout.addLayout(content_layout)
 
@@ -108,6 +114,15 @@ class MainWindow(QMainWindow):
         Display the repository status.
         """
         self.projectPanel.set_repository_status(text)
+
+    def set_project_dashboard(
+        self,
+        dashboard: ProjectDashboard,
+    ) -> None:
+        """
+        Display current project dashboard state.
+        """
+        self.projectDashboard.set_dashboard(dashboard)
 
     def set_recent_projects(
         self,

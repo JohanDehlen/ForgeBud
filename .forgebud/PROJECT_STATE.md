@@ -1,6 +1,6 @@
 # ForgeBud Project State
 
-Version: 0.3.1
+Version: 0.4.0
 
 Last Updated: 2026-07-17
 
@@ -53,9 +53,11 @@ Completed Components
 - Project lifecycle logic moved from MainWindow to ProjectController.
 - Recent Projects support implemented.
 - Release Manifest backend implemented.
-- ReleaseManifest model added.
-- ReleaseManifestService added with JSON validation, loading, and
-  saving.
+- Project Dashboard implemented.
+- ProjectDashboard model added.
+- ProjectDashboardWidget added.
+- ProjectController coordinates project, repository, and release data
+  for dashboard presentation.
 
 ---
 
@@ -75,29 +77,23 @@ Current Layers
 
 ## 1
 
-Project Dashboard improvements.
+Current Task Manager.
 
 ---
 
 ## 2
 
-Current Task Manager.
+Coding Standards support.
 
 ---
 
 ## 3
 
-Coding Standards support.
-
----
-
-## 4
-
 Project Summary Generator.
 
 ---
 
-## 5
+## 4
 
 Prompt Builder.
 
