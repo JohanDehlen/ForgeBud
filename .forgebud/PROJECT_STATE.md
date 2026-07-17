@@ -10,17 +10,15 @@ Last Updated: 2026-07-17
 
 ## Milestone 2 — Project Management
 
-Status:
-
-🟡 In Progress
+Status: In Progress
 
 ---
 
 # Current Objective
 
-Transform ForgeBud from a simple project helper into a complete AI-assisted software engineering workspace.
-
-The immediate objective is to move project logic out of MainWindow and establish the controller architecture that will support future AI integration.
+Complete the project-management capabilities that allow ForgeBud to
+understand a project, preserve its current state, and coordinate
+project workflows through controllers.
 
 ---
 
@@ -28,9 +26,7 @@ The immediate objective is to move project logic out of MainWindow and establish
 
 ## Milestone 1 — Foundation
 
-Status
-
-✅ Complete
+Status: Complete
 
 Completed Components
 
@@ -49,12 +45,17 @@ Completed Components
 - Project metadata
 - Open Project workflow
 
-The application can successfully:
+---
 
-- Open projects
-- Detect Git repositories
-- Initialize ForgeBud projects
-- Load project metadata
+# Completed Milestone 2 Work
+
+- ProjectController introduced.
+- Project lifecycle logic moved from MainWindow to ProjectController.
+- Recent Projects support implemented.
+- Release Manifest backend implemented.
+- ReleaseManifest model added.
+- ReleaseManifestService added with JSON validation, loading, and
+  saving.
 
 ---
 
@@ -64,12 +65,9 @@ Current Layers
 
 - MainWindow
 - Widgets
+- Controllers
 - Services
 - Models
-
-Next layer to introduce:
-
-- Controllers
 
 ---
 
@@ -77,43 +75,29 @@ Next layer to introduce:
 
 ## 1
 
-Create ProjectController.
-
-Move project logic from MainWindow into the controller.
+Project Dashboard improvements.
 
 ---
 
 ## 2
 
-Introduce Recent Projects.
+Current Task Manager.
 
 ---
 
 ## 3
 
-Create Release Manifest support.
+Coding Standards support.
 
 ---
 
 ## 4
 
-Project Dashboard improvements.
-
----
-
-## 5
-
-Current Task Manager.
-
----
-
-## 6
-
 Project Summary Generator.
 
 ---
 
-## 7
+## 5
 
 Prompt Builder.
 
@@ -155,27 +139,3 @@ Its primary purpose is to:
 - safely apply AI-generated code
 - support multiple AI providers
 - accelerate software development
-
----
-
-# Current Projects
-
-ForgeBud
-
-Voiceanator (next major project to be developed using ForgeBud)
-
-Future projects include:
-
-- Figured Mind
-- Biblical Insights
-- Future SaaS applications
-
----
-
-# Next Session
-
-Begin Milestone 2.
-
-First task:
-
-Create ProjectController and refactor MainWindow to delegate project operations to the controller.
