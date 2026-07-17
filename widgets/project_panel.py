@@ -1,11 +1,18 @@
+from __future__ import annotations
+
+from pathlib import Path
+
+from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
     QFormLayout,
-    QLabel,
-    QPushButton,
-    QHBoxLayout,
     QFrame,
+    QHBoxLayout,
+    QLabel,
+    QListWidget,
+    QListWidgetItem,
+    QPushButton,
+    QVBoxLayout,
+    QWidget,
 )
 
 from models.project_info import ProjectInfo
@@ -13,19 +20,31 @@ from models.project_info import ProjectInfo
 
 class ProjectPanel(QWidget):
     """
-    Displays information about the currently
-    opened project.
+    Displays current-project information and recent projects.
     """
 
-    def __init__(self):
+    recentProjectSelected = Signal(str)
+
+    def __init__(self) -> None:
         super().__init__()
 
-        mainLayout = QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
 
-        # -------------------------------------------------
-        # Project Information
-        # -------------------------------------------------
+        self._create_project_information(main_layout)
+        self._add_separator(main_layout)
+        self._create_project_actions(main_layout)
+        self._add_separator(main_layout)
+        self._create_recent_projects(main_layout)
 
+        main_layout.addStretch()
+
+    def _create_project_information(
+        self,
+        main_layout: QVBoxLayout,
+    ) -> None:
+        """
+        Create the current-project information display.
+        """
         form = QFormLayout()
 
         self.nameLabel = QLabel("-")
@@ -40,47 +59,64 @@ class ProjectPanel(QWidget):
         form.addRow("Framework", self.frameworkLabel)
         form.addRow("Repository", self.repositoryLabel)
 
-        mainLayout.addLayout(form)
+        main_layout.addLayout(form)
 
-        # -------------------------------------------------
-        # Separator
-        # -------------------------------------------------
-
-        separator = QFrame()
-        separator.setFrameShape(QFrame.HLine)
-
-        mainLayout.addWidget(separator)
-
-        # -------------------------------------------------
-        # Project Actions
-        # -------------------------------------------------
-
-        buttonLayout = QHBoxLayout()
+    def _create_project_actions(
+        self,
+        main_layout: QVBoxLayout,
+    ) -> None:
+        """
+        Create project action buttons.
+        """
+        button_layout = QHBoxLayout()
 
         self.openButton = QPushButton("Open Project")
-
         self.initializeButton = QPushButton(
             "Initialize ForgeBud"
         )
-
         self.initializeButton.setEnabled(False)
 
-        buttonLayout.addWidget(self.openButton)
-        buttonLayout.addWidget(self.initializeButton)
+        button_layout.addWidget(self.openButton)
+        button_layout.addWidget(self.initializeButton)
 
-        mainLayout.addLayout(buttonLayout)
+        main_layout.addLayout(button_layout)
 
-        mainLayout.addStretch()
-
-    # -------------------------------------------------
-    # Public API
-    # -------------------------------------------------
-
-    def clear(self):
+    def _create_recent_projects(
+        self,
+        main_layout: QVBoxLayout,
+    ) -> None:
         """
-        Clears the displayed project information.
+        Create the recent-projects display.
         """
+        recent_projects_label = QLabel("Recent Projects")
+        main_layout.addWidget(recent_projects_label)
 
+        self.recentProjectsList = QListWidget()
+        self.recentProjectsList.setToolTip(
+            "Select a project to open it."
+        )
+        self.recentProjectsList.itemClicked.connect(
+            self._select_recent_project
+        )
+
+        main_layout.addWidget(self.recentProjectsList)
+
+    def _add_separator(
+        self,
+        main_layout: QVBoxLayout,
+    ) -> None:
+        """
+        Add a horizontal separator to the panel.
+        """
+        separator = QFrame()
+        separator.setFrameShape(QFrame.HLine)
+
+        main_layout.addWidget(separator)
+
+    def clear(self) -> None:
+        """
+        Clear the displayed current-project information.
+        """
         self.nameLabel.setText("-")
         self.versionLabel.setText("-")
         self.languageLabel.setText("-")
@@ -89,33 +125,62 @@ class ProjectPanel(QWidget):
 
         self.initializeButton.setEnabled(False)
 
-    def set_project(self, info: ProjectInfo):
+    def set_project(self, info: ProjectInfo) -> None:
         """
         Display project metadata.
         """
-
         self.nameLabel.setText(info.name or "-")
         self.versionLabel.setText(info.version or "-")
         self.languageLabel.setText(info.language or "-")
         self.frameworkLabel.setText(info.framework or "-")
 
-    def set_repository_status(self, text: str):
+    def set_repository_status(self, text: str) -> None:
         """
         Update repository status.
         """
-
         self.repositoryLabel.setText(text)
 
-    def enable_initialize(self):
+    def set_recent_projects(
+        self,
+        project_paths: list[str],
+    ) -> None:
+        """
+        Display recent project folders.
+        """
+        self.recentProjectsList.clear()
+
+        for project_path in project_paths:
+            path = Path(project_path)
+            item = QListWidgetItem(path.name or project_path)
+
+            item.setData(
+                Qt.ItemDataRole.UserRole,
+                project_path,
+            )
+            item.setToolTip(project_path)
+
+            self.recentProjectsList.addItem(item)
+
+    def enable_initialize(self) -> None:
         """
         Enable the Initialize button.
         """
-
         self.initializeButton.setEnabled(True)
 
-    def disable_initialize(self):
+    def disable_initialize(self) -> None:
         """
         Disable the Initialize button.
         """
-
         self.initializeButton.setEnabled(False)
+
+    def _select_recent_project(
+        self,
+        item: QListWidgetItem,
+    ) -> None:
+        """
+        Emit the full path for the selected recent project.
+        """
+        project_path = item.data(Qt.ItemDataRole.UserRole)
+
+        if isinstance(project_path, str):
+            self.recentProjectSelected.emit(project_path)
