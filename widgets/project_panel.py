@@ -22,9 +22,9 @@ class ProjectPanel(QWidget):
 
         mainLayout = QVBoxLayout(self)
 
-        # -------------------------------------
+        # -------------------------------------------------
         # Project Information
-        # -------------------------------------
+        # -------------------------------------------------
 
         form = QFormLayout()
 
@@ -32,7 +32,7 @@ class ProjectPanel(QWidget):
         self.versionLabel = QLabel("-")
         self.languageLabel = QLabel("-")
         self.frameworkLabel = QLabel("-")
-        self.repositoryLabel = QLabel("Not Loaded")
+        self.repositoryLabel = QLabel("No Project Loaded")
 
         form.addRow("Project", self.nameLabel)
         form.addRow("Version", self.versionLabel)
@@ -42,23 +42,28 @@ class ProjectPanel(QWidget):
 
         mainLayout.addLayout(form)
 
-        # -------------------------------------
+        # -------------------------------------------------
         # Separator
-        # -------------------------------------
+        # -------------------------------------------------
 
-        line = QFrame()
-        line.setFrameShape(QFrame.HLine)
+        separator = QFrame()
+        separator.setFrameShape(QFrame.HLine)
 
-        mainLayout.addWidget(line)
+        mainLayout.addWidget(separator)
 
-        # -------------------------------------
-        # Buttons
-        # -------------------------------------
+        # -------------------------------------------------
+        # Project Actions
+        # -------------------------------------------------
 
         buttonLayout = QHBoxLayout()
 
         self.openButton = QPushButton("Open Project")
-        self.initializeButton = QPushButton("Initialize ForgeBud")
+
+        self.initializeButton = QPushButton(
+            "Initialize ForgeBud"
+        )
+
+        self.initializeButton.setEnabled(False)
 
         buttonLayout.addWidget(self.openButton)
         buttonLayout.addWidget(self.initializeButton)
@@ -66,6 +71,10 @@ class ProjectPanel(QWidget):
         mainLayout.addLayout(buttonLayout)
 
         mainLayout.addStretch()
+
+    # -------------------------------------------------
+    # Public API
+    # -------------------------------------------------
 
     def clear(self):
         """
@@ -76,11 +85,13 @@ class ProjectPanel(QWidget):
         self.versionLabel.setText("-")
         self.languageLabel.setText("-")
         self.frameworkLabel.setText("-")
-        self.repositoryLabel.setText("Not Loaded")
+        self.repositoryLabel.setText("No Project Loaded")
+
+        self.initializeButton.setEnabled(False)
 
     def set_project(self, info: ProjectInfo):
         """
-        Displays project information.
+        Display project metadata.
         """
 
         self.nameLabel.setText(info.name or "-")
@@ -88,9 +99,23 @@ class ProjectPanel(QWidget):
         self.languageLabel.setText(info.language or "-")
         self.frameworkLabel.setText(info.framework or "-")
 
-    def set_repository_status(self, status: str):
+    def set_repository_status(self, text: str):
         """
-        Updates the repository status.
+        Update repository status.
         """
 
-        self.repositoryLabel.setText(status)
+        self.repositoryLabel.setText(text)
+
+    def enable_initialize(self):
+        """
+        Enable the Initialize button.
+        """
+
+        self.initializeButton.setEnabled(True)
+
+    def disable_initialize(self):
+        """
+        Disable the Initialize button.
+        """
+
+        self.initializeButton.setEnabled(False)
