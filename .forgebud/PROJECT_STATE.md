@@ -2,11 +2,11 @@
 
 ## Current Version
 
-**v0.7.0**
+**v0.8.0**
 
-Status: **Coding Standards Manager Complete**
+Status: **Release Planning — Project Summary**
 
-Repository Status: **Implementation Committed and Pushed**
+Repository Status: **v0.7.0 Complete and Synchronized**
 
 ---
 
@@ -44,7 +44,7 @@ Repository Status: **Implementation Committed and Pushed**
 * Current task persistence service
 * Current task widget
 * Controller integration
-* Main window integration
+* MainWindow integration
 
 ## v0.6.0
 
@@ -53,7 +53,7 @@ Repository Status: **Implementation Committed and Pushed**
 * Decisions persistence service
 * Decisions manager widget
 * Controller integration
-* Main window integration
+* MainWindow integration
 * Read/write support for `.forgebud/decisions.md`
 
 ## v0.7.0
@@ -62,7 +62,7 @@ Repository Status: **Implementation Committed and Pushed**
 * Coding standards persistence service
 * Coding Standards Manager widget
 * Controller integration
-* Main window integration
+* MainWindow integration
 * Read/write support for `.forgebud/coding_standards.md`
 * Default coding-standards document for newly initialized projects
 * Safe preservation of existing coding-standards documents
@@ -79,7 +79,7 @@ ForgeBud follows a layered architecture:
 * Models contain application state only.
 * MainWindow owns application composition and signal wiring.
 
-Project memory now includes managed support for:
+Project memory currently includes managed support for:
 
 * Project metadata
 * Release manifest
@@ -87,43 +87,65 @@ Project memory now includes managed support for:
 * Engineering decisions
 * Coding standards
 
-All managed project-memory features follow the established layered pattern.
+All managed project-memory features follow the established layered architecture.
 
 ---
 
-# Current Release Status
+# Current Release
 
-Release: **v0.7.0 – Coding Standards Manager**
+Release: **v0.8.0 — Project Summary**
 
-State:
+Status:
 
-* Successfully implemented.
-* Successfully compiled.
-* Successfully runtime tested.
-* Coding standards load and save correctly.
-* Newly initialized projects receive a starter coding-standards document.
-* Existing coding-standards documents are preserved.
-* Existing project workflows remain functional.
-* Implementation committed and pushed.
-* Final project-memory documentation synchronization in progress.
+* Release selected from roadmap.
+* Release specification pending.
+* No implementation started.
+* No implementation files modified.
+* Existing functionality preserved.
 
 ---
 
-# Remaining Release Work
+# Next Objective
 
-The v0.7.0 implementation is complete.
+Milestone 2 — Project Management
 
-Remaining documentation updates:
+Objective:
 
-1. Update `.forgebud/current_task.md`.
-2. Update `.forgebud/release_manifest.md`.
-3. Leave `.forgebud/decisions.md` unchanged because no new architectural pattern was introduced.
-4. Commit and push the documentation synchronization.
+**Project Summary**
+
+The release will introduce managed project-summary support while preserving ForgeBud's existing layered architecture and project-memory system.
+
+Implementation must begin only after:
+
+1. A complete release specification has been written.
+2. All implementation dependencies have been inspected.
+3. The first implementation file has been selected.
 
 ---
 
-# Next Planned Work
+# Architectural Direction
 
-After the v0.7.0 documentation synchronization is committed and pushed, inspect `.forgebud/ROADMAP.md` and determine the next incomplete Project Management objective.
+The Project Summary feature will follow the same architectural pattern established by:
 
-The next release must begin with a complete release specification before implementation.
+* Release Manifest Manager
+* Current Task Manager
+* Decisions Manager
+* Coding Standards Manager
+
+The feature must preserve strict layer separation:
+
+* Controllers coordinate.
+* Services perform work.
+* Widgets display data and emit signals.
+* Models contain state only.
+* MainWindow owns UI composition.
+
+No architectural changes are currently planned.
+
+---
+
+# Repository State
+
+Current release planning is complete up to project-memory synchronization.
+
+The next repository activity is to create the v0.8.0 release specification, inspect all implementation dependencies, and begin implementation one file at a time following successful compilation after each generated file.

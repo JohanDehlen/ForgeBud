@@ -6,7 +6,7 @@ Version: **v0.7.0**
 
 Name: **Coding Standards Manager**
 
-Status: **Documentation Synchronization**
+Status: **Complete**
 
 ---
 
@@ -59,11 +59,13 @@ Manual Validation:
 * Existing projects without `coding_standards.md` remain supported.
 * Newly initialized projects receive a default coding-standards document.
 * Existing coding-standards documents are preserved.
+* Editing remains disabled for uninitialized projects.
 * Current Task Manager remains functional.
 * Decisions Manager remains functional.
 * Dashboard remains functional.
 * Project loading remains functional.
 * Recent projects remain functional.
+* Project initialization remains functional.
 
 ---
 
@@ -79,23 +81,35 @@ Verified.
 
 * Controllers coordinate workflows.
 * Services perform persistence and validation.
-* Widgets present data only.
+* Widgets display data and emit user actions.
 * Models contain application state only.
-* MainWindow owns UI composition only.
+* MainWindow owns UI composition and delegates work.
 
 No new architectural patterns were introduced.
+
+`.forgebud/decisions.md` therefore remains unchanged.
 
 ---
 
 # Release Notes
 
-This release introduces the Coding Standards Manager, extending ForgeBud's project-memory system with editable coding standards stored in `.forgebud/coding_standards.md`. The implementation follows the same architecture used by the Release Manifest, Current Task, and Decisions managers, ensuring a consistent development model across all managed project documents.
+This release introduces the Coding Standards Manager, extending ForgeBud's project-memory system with editable project-specific coding standards stored in `.forgebud/coding_standards.md`.
+
+The release adds a dedicated coding-standards model, persistence service, and manager widget. Loading and saving are coordinated through `ProjectController`, while `MainWindow` owns widget composition and signal wiring.
+
+Newly initialized projects receive a default coding-standards document. Existing coding-standards documents are preserved, and projects that do not yet contain the document remain supported.
+
+The implementation follows the same layered architecture used by the Release Manifest, Current Task, and Decisions managers.
 
 ---
 
 # Future Work
 
-Determine the next incomplete roadmap milestone after the documentation synchronization commit and begin the next release from a fresh specification.
+The next incomplete objective under Milestone 2 — Project Management is:
+
+**Project Summary**
+
+The next release must begin with a complete release specification before implementation starts.
 
 ---
 
@@ -107,6 +121,8 @@ Compilation Passed
 
 Runtime Validation Passed
 
-Implementation Pushed
+Implementation Committed and Pushed
 
-Documentation Synchronization In Progress
+Documentation Synchronization Complete
+
+Release Complete
