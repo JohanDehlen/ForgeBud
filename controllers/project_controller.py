@@ -8,6 +8,7 @@ from models.current_task import CurrentTask
 from models.decisions import Decisions
 from models.project_dashboard import ProjectDashboard
 from models.project_info import ProjectInfo
+from models.project_summary import ProjectSummary
 from services.coding_standards_service import (
     CodingStandardsService,
 )
@@ -16,6 +17,9 @@ from services.current_task_service import CurrentTaskService
 from services.decisions_service import DecisionsService
 from services.git_service import GitService
 from services.project_service import ProjectService
+from services.project_summary_service import (
+    ProjectSummaryService,
+)
 from services.release_manifest_service import (
     ReleaseManifestService,
 )
@@ -63,6 +67,29 @@ class ProjectWindow(Protocol):
     ) -> None:
         """
         Display project dashboard state.
+        """
+
+    def set_project_summary(
+        self,
+        project_summary: ProjectSummary,
+    ) -> None:
+        """
+        Display project-summary state.
+        """
+
+    def clear_project_summary(self) -> None:
+        """
+        Clear displayed project-summary state.
+        """
+
+    def enable_project_summary_editing(self) -> None:
+        """
+        Enable project-summary editing and saving.
+        """
+
+    def disable_project_summary_editing(self) -> None:
+        """
+        Disable project-summary editing and saving.
         """
 
     def set_current_task(
@@ -210,6 +237,7 @@ class ProjectController:
             self._show_uninitialized_project()
 
         self.refresh_project_dashboard()
+        self.refresh_project_summary()
         self.refresh_current_task()
         self.refresh_decisions()
         self.refresh_coding_standards()
@@ -240,6 +268,39 @@ class ProjectController:
         )
         self._window.show_status(
             "Project initialized successfully."
+        )
+
+    def save_project_summary(self, markdown: str) -> None:
+        """
+        Save project-summary Markdown for the opened project.
+        """
+        if not self._can_save_project_document(
+            "its project summary"
+        ):
+            return
+
+        project_summary = ProjectSummary(
+            markdown=markdown
+        )
+
+        try:
+            ProjectSummaryService.save(
+                self._project_path,
+                project_summary,
+            )
+        except ValueError as error:
+            self._window.show_information(
+                "Project Summary",
+                str(error),
+            )
+            self._window.show_status(
+                "Project summary could not be saved."
+            )
+            return
+
+        self.refresh_project_summary()
+        self._window.show_status(
+            "Project summary saved successfully."
         )
 
     def save_current_task(self, markdown: str) -> None:
@@ -379,6 +440,24 @@ class ProjectController:
 
         self._window.set_project_dashboard(dashboard)
 
+    def refresh_project_summary(self) -> None:
+        """
+        Load and display project-summary state for the opened project.
+        """
+        if not self._has_initialized_project():
+            self._window.clear_project_summary()
+            self._window.disable_project_summary_editing()
+            return
+
+        project_summary = ProjectSummaryService.load(
+            self._project_path
+        )
+
+        self._window.set_project_summary(
+            project_summary
+        )
+        self._window.enable_project_summary_editing()
+
     def refresh_current_task(self) -> None:
         """
         Load and display current-task state for the opened project.
@@ -503,6 +582,9 @@ class ProjectController:
             "Project not initialized"
         )
         self._window.enable_initialize()
+
+        self._window.clear_project_summary()
+        self._window.disable_project_summary_editing()
 
         self._window.clear_current_task()
         self._window.disable_current_task_editing()

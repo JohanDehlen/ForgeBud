@@ -1,5 +1,6 @@
 from PySide6.QtWidgets import (
     QFileDialog,
+    QGridLayout,
     QHBoxLayout,
     QMainWindow,
     QMessageBox,
@@ -13,6 +14,7 @@ from models.current_task import CurrentTask
 from models.decisions import Decisions
 from models.project_dashboard import ProjectDashboard
 from models.project_info import ProjectInfo
+from models.project_summary import ProjectSummary
 from version import APP_NAME, APP_VERSION
 from widgets.coding_standards_manager import (
     CodingStandardsManagerWidget,
@@ -23,6 +25,9 @@ from widgets.current_task_manager import (
 from widgets.decisions_manager import DecisionsManagerWidget
 from widgets.project_dashboard import ProjectDashboardWidget
 from widgets.project_panel import ProjectPanel
+from widgets.project_summary_manager import (
+    ProjectSummaryManagerWidget,
+)
 from widgets.status_bar import StatusBar
 
 
@@ -44,6 +49,7 @@ class MainWindow(QMainWindow):
 
         self.projectController.refresh_recent_projects()
         self.projectController.refresh_project_dashboard()
+        self.projectController.refresh_project_summary()
         self.projectController.refresh_current_task()
         self.projectController.refresh_decisions()
         self.projectController.refresh_coding_standards()
@@ -66,24 +72,44 @@ class MainWindow(QMainWindow):
         self.projectDashboard = ProjectDashboardWidget()
         workspace_layout.addWidget(self.projectDashboard)
 
-        project_memory_layout = QHBoxLayout()
+        project_memory_layout = QGridLayout()
+
+        self.projectSummaryManager = (
+            ProjectSummaryManagerWidget()
+        )
+        project_memory_layout.addWidget(
+            self.projectSummaryManager,
+            0,
+            0,
+        )
 
         self.currentTaskManager = CurrentTaskManagerWidget()
         project_memory_layout.addWidget(
-            self.currentTaskManager
+            self.currentTaskManager,
+            0,
+            1,
         )
 
         self.decisionsManager = DecisionsManagerWidget()
         project_memory_layout.addWidget(
-            self.decisionsManager
+            self.decisionsManager,
+            1,
+            0,
         )
 
         self.codingStandardsManager = (
             CodingStandardsManagerWidget()
         )
         project_memory_layout.addWidget(
-            self.codingStandardsManager
+            self.codingStandardsManager,
+            1,
+            1,
         )
+
+        project_memory_layout.setColumnStretch(0, 1)
+        project_memory_layout.setColumnStretch(1, 1)
+        project_memory_layout.setRowStretch(0, 1)
+        project_memory_layout.setRowStretch(1, 1)
 
         workspace_layout.addLayout(project_memory_layout)
         content_layout.addLayout(workspace_layout)
@@ -111,6 +137,9 @@ class MainWindow(QMainWindow):
         )
         self.projectPanel.recentProjectSelected.connect(
             self.projectController.open_recent_project
+        )
+        self.projectSummaryManager.saveRequested.connect(
+            self.projectController.save_project_summary
         )
         self.currentTaskManager.saveRequested.connect(
             self.projectController.save_current_task
@@ -169,6 +198,35 @@ class MainWindow(QMainWindow):
         Display current project dashboard state.
         """
         self.projectDashboard.set_dashboard(dashboard)
+
+    def set_project_summary(
+        self,
+        project_summary: ProjectSummary,
+    ) -> None:
+        """
+        Display project-summary state.
+        """
+        self.projectSummaryManager.set_project_summary(
+            project_summary
+        )
+
+    def clear_project_summary(self) -> None:
+        """
+        Clear displayed project-summary state.
+        """
+        self.projectSummaryManager.clear()
+
+    def enable_project_summary_editing(self) -> None:
+        """
+        Enable project-summary editing and saving.
+        """
+        self.projectSummaryManager.enable_editing()
+
+    def disable_project_summary_editing(self) -> None:
+        """
+        Disable project-summary editing and saving.
+        """
+        self.projectSummaryManager.disable_editing()
 
     def set_current_task(
         self,

@@ -11,6 +11,7 @@ Project Structure
 <Project>/
     .forgebud/
         project.json
+        project_summary.md
         roadmap.md
         architecture.md
         current_task.md
@@ -37,6 +38,35 @@ class ProjectService:
 
     FORGEBUD_FOLDER = ".forgebud"
     PROJECT_FILE = "project.json"
+
+    DEFAULT_PROJECT_SUMMARY = """# Project Summary
+
+## Purpose
+
+Describe why this project exists.
+
+## What It Does
+
+Describe the primary functionality of the project.
+
+## Intended Users
+
+Describe who or what the project is designed for.
+
+## Technology
+
+Document the primary language, framework, platform, and important
+dependencies.
+
+## Current State
+
+Describe the project's present development state.
+
+## Important Context
+
+Record constraints, assumptions, or background information needed
+to understand the project.
+"""
 
     DEFAULT_CODING_STANDARDS = """# Coding Standards
 
@@ -103,6 +133,7 @@ Add project-specific coding rules below this section.
 """
 
     DEFAULT_FILES = {
+        "project_summary.md": DEFAULT_PROJECT_SUMMARY,
         "roadmap.md": "# Roadmap\n",
         "architecture.md": "# Architecture\n",
         "current_task.md": "# Current Task\n",
