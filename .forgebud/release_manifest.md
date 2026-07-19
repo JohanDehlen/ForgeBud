@@ -2,30 +2,31 @@
 
 ## Release
 
-Version: **v0.6.0**
+Version: **v0.7.0**
 
-Name: **Decisions Manager**
+Name: **Coding Standards Manager**
 
-Status: **Ready for Commit**
+Status: **Documentation Synchronization**
 
 ---
 
 # Goal
 
-Add persistent management of engineering decisions stored in `.forgebud/decisions.md` while preserving ForgeBud's layered architecture and existing functionality.
+Add persistent management of project-specific coding standards stored in `.forgebud/coding_standards.md` while preserving ForgeBud's layered architecture and all existing functionality.
 
 ---
 
 # Files Added
 
-* `models/decisions.py`
-* `services/decisions_service.py`
-* `widgets/decisions_manager.py`
+* `models/coding_standards.py`
+* `services/coding_standards_service.py`
+* `widgets/coding_standards_manager.py`
 
 ---
 
 # Files Modified
 
+* `services/project_service.py`
 * `controllers/project_controller.py`
 * `main_window.py`
 * `.forgebud/PROJECT_STATE.md`
@@ -52,11 +53,14 @@ Application Startup:
 
 Manual Validation:
 
-* Engineering decisions load correctly.
-* Engineering decisions save correctly.
-* Editing is disabled for uninitialized projects.
-* Editing is enabled for initialized projects.
+* Coding Standards Manager loads correctly.
+* Coding standards save correctly.
+* Coding standards reload correctly.
+* Existing projects without `coding_standards.md` remain supported.
+* Newly initialized projects receive a default coding-standards document.
+* Existing coding-standards documents are preserved.
 * Current Task Manager remains functional.
+* Decisions Manager remains functional.
 * Dashboard remains functional.
 * Project loading remains functional.
 * Recent projects remain functional.
@@ -74,23 +78,24 @@ None.
 Verified.
 
 * Controllers coordinate workflows.
-* Services perform persistence.
+* Services perform persistence and validation.
 * Widgets present data only.
 * Models contain application state only.
+* MainWindow owns UI composition only.
 
-No architectural deviations were introduced.
+No new architectural patterns were introduced.
 
 ---
 
 # Release Notes
 
-This release introduces the Decisions Manager, completing another project-memory capability alongside the Release Manifest Manager and Current Task Manager. Engineering decisions can now be viewed and edited directly within ForgeBud while following the same architecture and persistence model as the existing project-memory features.
+This release introduces the Coding Standards Manager, extending ForgeBud's project-memory system with editable coding standards stored in `.forgebud/coding_standards.md`. The implementation follows the same architecture used by the Release Manifest, Current Task, and Decisions managers, ensuring a consistent development model across all managed project documents.
 
 ---
 
 # Future Work
 
-Determine the next release from `.forgebud/ROADMAP.md` after v0.6.0 has been committed and pushed.
+Determine the next incomplete roadmap milestone after the documentation synchronization commit and begin the next release from a fresh specification.
 
 ---
 
@@ -102,6 +107,6 @@ Compilation Passed
 
 Runtime Validation Passed
 
-Ready to Commit
+Implementation Pushed
 
-Ready to Push
+Documentation Synchronization In Progress

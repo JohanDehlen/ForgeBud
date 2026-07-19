@@ -2,9 +2,11 @@
 
 ## Current Version
 
-**v0.6.0**
+**v0.7.0**
 
-Status: **Decisions Manager Complete (Awaiting Commit)**
+Status: **Coding Standards Manager Complete**
+
+Repository Status: **Implementation Committed and Pushed**
 
 ---
 
@@ -46,12 +48,24 @@ Status: **Decisions Manager Complete (Awaiting Commit)**
 
 ## v0.6.0
 
+* Decisions Manager
 * Decisions model
 * Decisions persistence service
 * Decisions manager widget
 * Controller integration
 * Main window integration
 * Read/write support for `.forgebud/decisions.md`
+
+## v0.7.0
+
+* Coding standards model
+* Coding standards persistence service
+* Coding Standards Manager widget
+* Controller integration
+* Main window integration
+* Read/write support for `.forgebud/coding_standards.md`
+* Default coding-standards document for newly initialized projects
+* Safe preservation of existing coding-standards documents
 
 ---
 
@@ -63,45 +77,53 @@ ForgeBud follows a layered architecture:
 * Services perform business logic and persistence.
 * Widgets display state and emit user actions.
 * Models contain application state only.
+* MainWindow owns application composition and signal wiring.
 
-Project memory now includes:
+Project memory now includes managed support for:
 
 * Project metadata
 * Release manifest
 * Current task
 * Engineering decisions
+* Coding standards
 
-All follow the same architectural pattern.
+All managed project-memory features follow the established layered pattern.
 
 ---
 
 # Current Release Status
 
-Release: **v0.6.0 – Decisions Manager**
+Release: **v0.7.0 – Coding Standards Manager**
 
 State:
 
 * Successfully implemented.
 * Successfully compiled.
 * Successfully runtime tested.
-* Awaiting commit and push.
+* Coding standards load and save correctly.
+* Newly initialized projects receive a starter coding-standards document.
+* Existing coding-standards documents are preserved.
+* Existing project workflows remain functional.
+* Implementation committed and pushed.
+* Final project-memory documentation synchronization in progress.
 
 ---
 
-# Next Planned Milestone
+# Remaining Release Work
 
-The next roadmap milestone should be determined from the repository after v0.6.0 has been committed and pushed.
+The v0.7.0 implementation is complete.
+
+Remaining documentation updates:
+
+1. Update `.forgebud/current_task.md`.
+2. Update `.forgebud/release_manifest.md`.
+3. Leave `.forgebud/decisions.md` unchanged because no new architectural pattern was introduced.
+4. Commit and push the documentation synchronization.
 
 ---
 
-# Repository Status
+# Next Planned Work
 
-Working tree contains the completed v0.6.0 implementation and pending documentation updates.
+After the v0.7.0 documentation synchronization is committed and pushed, inspect `.forgebud/ROADMAP.md` and determine the next incomplete Project Management objective.
 
-Next workflow step:
-
-1. Update `current_task.md`
-2. Update `release_manifest.md`
-3. Update `decisions.md` (only if architecture changed)
-4. Commit
-5. Push
+The next release must begin with a complete release specification before implementation.
