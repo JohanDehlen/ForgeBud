@@ -15,6 +15,7 @@ Project Structure
         architecture.md
         current_task.md
         assistant_rules.md
+        coding_standards.md
         decisions.md
         changelog.md
 """
@@ -30,16 +31,83 @@ from services.file_service import FileService
 
 
 class ProjectService:
+    """
+    Manages ForgeBud project initialization and metadata.
+    """
 
     FORGEBUD_FOLDER = ".forgebud"
-
     PROJECT_FILE = "project.json"
+
+    DEFAULT_CODING_STANDARDS = """# Coding Standards
+
+## General Principles
+
+- Prefer readable code over clever code.
+- Keep responsibilities clearly separated.
+- Preserve existing functionality unless a change is intentional.
+- Avoid duplicated logic.
+- Keep implementations simple and explicit.
+
+## Language and Framework Conventions
+
+Document the language, framework, and library conventions used by
+this project.
+
+## Naming
+
+- Use descriptive names.
+- Follow the naming conventions of the project's language.
+- Avoid unclear abbreviations.
+
+## Type Hints
+
+- Add type hints where supported and practical.
+- Keep public interfaces explicit.
+- Avoid ambiguous return types.
+
+## Functions and Classes
+
+- Give each function and class one clear responsibility.
+- Keep methods focused and reasonably short.
+- Prefer composition over inheritance.
+- Avoid hidden side effects.
+
+## Error Handling
+
+- Handle expected failures explicitly.
+- Do not silently ignore important errors.
+- Provide useful error messages.
+- Avoid broad exception handling unless recovery is intentional.
+
+## Documentation
+
+- Write meaningful docstrings for public classes and methods.
+- Explain why a non-obvious decision was made.
+- Keep documentation synchronized with implementation.
+
+## Testing
+
+- Add tests for new behavior where practical.
+- Preserve existing tests.
+- Test failure paths as well as successful paths.
+
+## Dependencies
+
+- Reuse existing dependencies when appropriate.
+- Avoid adding unnecessary packages.
+- Record significant dependency decisions in project memory.
+
+## Project-Specific Rules
+
+Add project-specific coding rules below this section.
+"""
 
     DEFAULT_FILES = {
         "roadmap.md": "# Roadmap\n",
         "architecture.md": "# Architecture\n",
         "current_task.md": "# Current Task\n",
         "assistant_rules.md": "# Assistant Rules\n",
+        "coding_standards.md": DEFAULT_CODING_STANDARDS,
         "decisions.md": "# Decisions\n",
         "changelog.md": "# Changelog\n",
     }
@@ -52,18 +120,16 @@ class ProjectService:
     ) -> None:
         """
         Initialize a project for ForgeBud.
+
+        Existing project-memory documents are preserved.
         """
-
         project_path = Path(project_path)
-
         fb_folder = project_path / cls.FORGEBUD_FOLDER
 
         FileService.create_directory(fb_folder)
-
         cls.save(project_path, info)
 
         for filename, contents in cls.DEFAULT_FILES.items():
-
             file = fb_folder / filename
 
             if not file.exists():
@@ -81,9 +147,7 @@ class ProjectService:
         """
         Save project.json.
         """
-
         project_path = Path(project_path)
-
         fb_folder = project_path / cls.FORGEBUD_FOLDER
 
         FileService.create_directory(fb_folder)
@@ -106,7 +170,6 @@ class ProjectService:
         """
         Load project.json.
         """
-
         project_path = Path(project_path)
 
         project_file = (
@@ -132,10 +195,8 @@ class ProjectService:
         project_path: str | Path,
     ) -> bool:
         """
-        Returns True if the project has already
-        been initialized for ForgeBud.
+        Return True when a project has been initialized for ForgeBud.
         """
-
         project_path = Path(project_path)
 
         return (

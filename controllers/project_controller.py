@@ -3,10 +3,14 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Protocol
 
+from models.coding_standards import CodingStandards
 from models.current_task import CurrentTask
 from models.decisions import Decisions
 from models.project_dashboard import ProjectDashboard
 from models.project_info import ProjectInfo
+from services.coding_standards_service import (
+    CodingStandardsService,
+)
 from services.context_service import ContextService
 from services.current_task_service import CurrentTaskService
 from services.decisions_service import DecisionsService
@@ -107,6 +111,29 @@ class ProjectWindow(Protocol):
         Disable engineering decisions editing and saving.
         """
 
+    def set_coding_standards(
+        self,
+        coding_standards: CodingStandards,
+    ) -> None:
+        """
+        Display coding-standards state.
+        """
+
+    def clear_coding_standards(self) -> None:
+        """
+        Clear displayed coding-standards state.
+        """
+
+    def enable_coding_standards_editing(self) -> None:
+        """
+        Enable coding-standards editing and saving.
+        """
+
+    def disable_coding_standards_editing(self) -> None:
+        """
+        Disable coding-standards editing and saving.
+        """
+
     def enable_initialize(self) -> None:
         """
         Enable project initialization.
@@ -185,6 +212,7 @@ class ProjectController:
         self.refresh_project_dashboard()
         self.refresh_current_task()
         self.refresh_decisions()
+        self.refresh_coding_standards()
 
     def initialize_project(self) -> None:
         """
@@ -276,6 +304,39 @@ class ProjectController:
             "Engineering decisions saved successfully."
         )
 
+    def save_coding_standards(self, markdown: str) -> None:
+        """
+        Save coding-standards Markdown for the opened project.
+        """
+        if not self._can_save_project_document(
+            "its coding standards"
+        ):
+            return
+
+        coding_standards = CodingStandards(
+            markdown=markdown
+        )
+
+        try:
+            CodingStandardsService.save(
+                self._project_path,
+                coding_standards,
+            )
+        except ValueError as error:
+            self._window.show_information(
+                "Coding Standards",
+                str(error),
+            )
+            self._window.show_status(
+                "Coding standards could not be saved."
+            )
+            return
+
+        self.refresh_coding_standards()
+        self._window.show_status(
+            "Coding standards saved successfully."
+        )
+
     def refresh_recent_projects(self) -> None:
         """
         Load valid recent projects and display them through the UI.
@@ -349,6 +410,24 @@ class ProjectController:
 
         self._window.set_decisions(decisions)
         self._window.enable_decisions_editing()
+
+    def refresh_coding_standards(self) -> None:
+        """
+        Load and display coding standards for the opened project.
+        """
+        if not self._has_initialized_project():
+            self._window.clear_coding_standards()
+            self._window.disable_coding_standards_editing()
+            return
+
+        coding_standards = CodingStandardsService.load(
+            self._project_path
+        )
+
+        self._window.set_coding_standards(
+            coding_standards
+        )
+        self._window.enable_coding_standards_editing()
 
     def _can_save_project_document(
         self,
@@ -430,6 +509,9 @@ class ProjectController:
 
         self._window.clear_decisions()
         self._window.disable_decisions_editing()
+
+        self._window.clear_coding_standards()
+        self._window.disable_coding_standards_editing()
 
         self._window.show_status(
             "Project ready for initialization."

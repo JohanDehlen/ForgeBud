@@ -8,11 +8,15 @@ from PySide6.QtWidgets import (
 )
 
 from controllers.project_controller import ProjectController
+from models.coding_standards import CodingStandards
 from models.current_task import CurrentTask
 from models.decisions import Decisions
 from models.project_dashboard import ProjectDashboard
 from models.project_info import ProjectInfo
 from version import APP_NAME, APP_VERSION
+from widgets.coding_standards_manager import (
+    CodingStandardsManagerWidget,
+)
 from widgets.current_task_manager import (
     CurrentTaskManagerWidget,
 )
@@ -42,6 +46,7 @@ class MainWindow(QMainWindow):
         self.projectController.refresh_project_dashboard()
         self.projectController.refresh_current_task()
         self.projectController.refresh_decisions()
+        self.projectController.refresh_coding_standards()
 
     def _create_ui(self) -> None:
         """
@@ -71,6 +76,13 @@ class MainWindow(QMainWindow):
         self.decisionsManager = DecisionsManagerWidget()
         project_memory_layout.addWidget(
             self.decisionsManager
+        )
+
+        self.codingStandardsManager = (
+            CodingStandardsManagerWidget()
+        )
+        project_memory_layout.addWidget(
+            self.codingStandardsManager
         )
 
         workspace_layout.addLayout(project_memory_layout)
@@ -105,6 +117,9 @@ class MainWindow(QMainWindow):
         )
         self.decisionsManager.saveRequested.connect(
             self.projectController.save_decisions
+        )
+        self.codingStandardsManager.saveRequested.connect(
+            self.projectController.save_coding_standards
         )
 
     def show_status(self, message: str) -> None:
@@ -210,6 +225,35 @@ class MainWindow(QMainWindow):
         Disable engineering decisions editing and saving.
         """
         self.decisionsManager.disable_editing()
+
+    def set_coding_standards(
+        self,
+        coding_standards: CodingStandards,
+    ) -> None:
+        """
+        Display coding-standards state.
+        """
+        self.codingStandardsManager.set_coding_standards(
+            coding_standards
+        )
+
+    def clear_coding_standards(self) -> None:
+        """
+        Clear displayed coding-standards state.
+        """
+        self.codingStandardsManager.clear()
+
+    def enable_coding_standards_editing(self) -> None:
+        """
+        Enable coding-standards editing and saving.
+        """
+        self.codingStandardsManager.enable_editing()
+
+    def disable_coding_standards_editing(self) -> None:
+        """
+        Disable coding-standards editing and saving.
+        """
+        self.codingStandardsManager.disable_editing()
 
     def set_recent_projects(
         self,
