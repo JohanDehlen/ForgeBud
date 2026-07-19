@@ -2,25 +2,25 @@
 
 ## Release
 
-Version: **v0.7.0**
+Version: **v0.8.0**
 
-Name: **Coding Standards Manager**
+Name: **Project Summary**
 
-Status: **Complete**
+Status: **Ready for Commit**
 
 ---
 
 # Goal
 
-Add persistent management of project-specific coding standards stored in `.forgebud/coding_standards.md` while preserving ForgeBud's layered architecture and all existing functionality.
+Introduce managed Project Summary support so ForgeBud can create, load, display, edit, and persist concise project summaries stored in `.forgebud/project_summary.md`, while preserving the existing layered architecture and all current functionality.
 
 ---
 
 # Files Added
 
-* `models/coding_standards.py`
-* `services/coding_standards_service.py`
-* `widgets/coding_standards_manager.py`
+* `models/project_summary.py`
+* `services/project_summary_service.py`
+* `widgets/project_summary_manager.py`
 
 ---
 
@@ -43,35 +43,36 @@ None.
 
 # Validation
 
-Compilation:
+## Compilation
 
-* Passed
+* Project Summary model compiled successfully.
+* Project Summary service compiled successfully.
+* Updated Project Service compiled successfully.
+* Project Summary widget compiled successfully.
+* Updated Project Controller compiled successfully.
+* Updated MainWindow compiled successfully.
+* Full project compilation passed.
 
-Application Startup:
+## Runtime Validation
 
-* Passed
+Verified successfully:
 
-Manual Validation:
-
-* Coding Standards Manager loads correctly.
-* Coding standards save correctly.
-* Coding standards reload correctly.
-* Existing projects without `coding_standards.md` remain supported.
-* Newly initialized projects receive a default coding-standards document.
-* Existing coding-standards documents are preserved.
-* Editing remains disabled for uninitialized projects.
-* Current Task Manager remains functional.
-* Decisions Manager remains functional.
+* Application starts without exceptions.
+* Project Summary Manager appears correctly.
+* The project-memory workspace displays four managers in a 2×2 grid.
+* No project loaded results in a cleared and disabled Project Summary editor.
+* Uninitialized projects also display a cleared and disabled editor.
+* Initialized projects without `project_summary.md` load valid empty editable state.
+* Saving creates `project_summary.md`.
+* Saved project summaries reload correctly.
+* Newly initialized projects receive a starter project-summary document.
+* Existing project-summary documents are preserved.
+* Current Task Manager continues to function.
+* Decisions Manager continues to function.
+* Coding Standards Manager continues to function.
 * Dashboard remains functional.
-* Project loading remains functional.
-* Recent projects remain functional.
+* Recent-project support remains functional.
 * Project initialization remains functional.
-
----
-
-# Known Issues
-
-None.
 
 ---
 
@@ -80,36 +81,28 @@ None.
 Verified.
 
 * Controllers coordinate workflows.
-* Services perform persistence and validation.
-* Widgets display data and emit user actions.
-* Models contain application state only.
-* MainWindow owns UI composition and delegates work.
+* Services perform validation and persistence.
+* Widgets display state and emit signals.
+* Models contain state only.
+* MainWindow owns UI composition only.
 
-No new architectural patterns were introduced.
-
-`.forgebud/decisions.md` therefore remains unchanged.
+The new 2×2 project-memory layout is a user-interface improvement only and does not introduce a new architectural pattern.
 
 ---
 
 # Release Notes
 
-This release introduces the Coding Standards Manager, extending ForgeBud's project-memory system with editable project-specific coding standards stored in `.forgebud/coding_standards.md`.
+This release expands ForgeBud's managed project-memory system by introducing Project Summary support.
 
-The release adds a dedicated coding-standards model, persistence service, and manager widget. Loading and saving are coordinated through `ProjectController`, while `MainWindow` owns widget composition and signal wiring.
+Projects can now maintain an editable Markdown summary describing their purpose, technology, intended users, current state, and important context. The summary is stored in `.forgebud/project_summary.md`, is created automatically for new projects, and is safely supported for existing projects that do not yet contain the document.
 
-Newly initialized projects receive a default coding-standards document. Existing coding-standards documents are preserved, and projects that do not yet contain the document remain supported.
-
-The implementation follows the same layered architecture used by the Release Manifest, Current Task, and Decisions managers.
+The project-memory workspace has also been reorganized into a 2×2 grid, allowing all four project-memory managers to remain comfortably usable.
 
 ---
 
-# Future Work
+# Known Issues
 
-The next incomplete objective under Milestone 2 — Project Management is:
-
-**Project Summary**
-
-The next release must begin with a complete release specification before implementation starts.
+None.
 
 ---
 
@@ -121,8 +114,16 @@ Compilation Passed
 
 Runtime Validation Passed
 
-Implementation Committed and Pushed
+Documentation Synchronized
 
-Documentation Synchronization Complete
+Ready for Commit
 
-Release Complete
+Ready for Push
+
+---
+
+# Next Step
+
+Commit the completed v0.8.0 release and push it to GitHub.
+
+After the repository is synchronized, inspect `.forgebud/ROADMAP.md` to determine the next incomplete roadmap milestone before beginning v0.9.0.

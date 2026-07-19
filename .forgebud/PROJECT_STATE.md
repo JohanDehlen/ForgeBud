@@ -18,6 +18,26 @@ Repository Status: **v0.7.0 Complete and Synchronized**
 * ForgeBud project creation
 * Project metadata management
 
+# ForgeBud Project State
+
+## Current Version
+
+**v0.8.0**
+
+Status: **Project Summary Complete — Awaiting Commit**
+
+Repository Status: **Local Release Complete; Push Pending**
+
+---
+
+# Completed Milestones
+
+## v0.1.0
+
+* Project initialization
+* ForgeBud project creation
+* Project metadata management
+
 ## v0.2.0
 
 * Repository detection
@@ -58,6 +78,7 @@ Repository Status: **v0.7.0 Complete and Synchronized**
 
 ## v0.7.0
 
+* Coding Standards Manager
 * Coding standards model
 * Coding standards persistence service
 * Coding Standards Manager widget
@@ -67,6 +88,19 @@ Repository Status: **v0.7.0 Complete and Synchronized**
 * Default coding-standards document for newly initialized projects
 * Safe preservation of existing coding-standards documents
 
+## v0.8.0
+
+* Project Summary model
+* Project Summary persistence service
+* Project Summary Manager widget
+* Controller integration
+* MainWindow integration
+* Read/write support for `.forgebud/project_summary.md`
+* Default project-summary document for newly initialized projects
+* Compatibility with existing projects that do not contain a project summary
+* Safe preservation of existing project-summary documents
+* Project-memory workspace reorganized into a usable 2×2 grid
+
 ---
 
 # Current Architecture
@@ -74,7 +108,7 @@ Repository Status: **v0.7.0 Complete and Synchronized**
 ForgeBud follows a layered architecture:
 
 * Controllers coordinate workflows.
-* Services perform business logic and persistence.
+* Services perform business logic, validation, and persistence.
 * Widgets display state and emit user actions.
 * Models contain application state only.
 * MainWindow owns application composition and signal wiring.
@@ -83,6 +117,7 @@ Project memory currently includes managed support for:
 
 * Project metadata
 * Release manifest
+* Project summary
 * Current task
 * Engineering decisions
 * Coding standards
@@ -95,57 +130,58 @@ All managed project-memory features follow the established layered architecture.
 
 Release: **v0.8.0 — Project Summary**
 
-Status:
+State:
 
-* Release selected from roadmap.
-* Release specification pending.
-* No implementation started.
-* No implementation files modified.
-* Existing functionality preserved.
-
----
-
-# Next Objective
-
-Milestone 2 — Project Management
-
-Objective:
-
-**Project Summary**
-
-The release will introduce managed project-summary support while preserving ForgeBud's existing layered architecture and project-memory system.
-
-Implementation must begin only after:
-
-1. A complete release specification has been written.
-2. All implementation dependencies have been inspected.
-3. The first implementation file has been selected.
+* Release specification completed.
+* Implementation completed.
+* Per-file compilation passed.
+* Full project compilation passed.
+* Application startup passed.
+* Runtime validation passed.
+* Project summaries load correctly.
+* Project summaries save correctly.
+* Missing project-summary documents are supported as valid empty state.
+* New project initialization creates a starter project summary.
+* Existing project-summary documents are preserved.
+* Existing project-memory managers remain functional.
+* Dashboard, recent-project, and initialization workflows remain functional.
+* Awaiting final documentation synchronization, commit, and push.
 
 ---
 
-# Architectural Direction
+# Project-Memory Workspace
 
-The Project Summary feature will follow the same architectural pattern established by:
+The application currently displays four editable project-memory managers in a 2×2 grid:
 
-* Release Manifest Manager
-* Current Task Manager
-* Decisions Manager
-* Coding Standards Manager
+* Project Summary
+* Current Task
+* Engineering Decisions
+* Coding Standards
 
-The feature must preserve strict layer separation:
-
-* Controllers coordinate.
-* Services perform work.
-* Widgets display data and emit signals.
-* Models contain state only.
-* MainWindow owns UI composition.
-
-No architectural changes are currently planned.
+This layout preserves usable editor width while keeping all managed project-memory documents visible within the main workspace.
 
 ---
 
-# Repository State
+# Remaining Release Work
 
-Current release planning is complete up to project-memory synchronization.
+1. Update `.forgebud/current_task.md`.
+2. Update `.forgebud/release_manifest.md`.
+3. Leave `.forgebud/decisions.md` unchanged because no architectural pattern changed.
+4. Run final compilation if needed.
+5. Commit the complete v0.8.0 release.
+6. Push the release to GitHub.
 
-The next repository activity is to create the v0.8.0 release specification, inspect all implementation dependencies, and begin implementation one file at a time following successful compilation after each generated file.
+---
+
+# Next Planned Work
+
+After v0.8.0 is committed and pushed:
+
+1. Re-read every document in `.forgebud`.
+2. Inspect `.forgebud/ROADMAP.md`.
+3. Determine the next incomplete roadmap objective.
+4. Create a complete release specification.
+5. Inspect every required implementation dependency.
+6. Continue one implementation file at a time.
+
+No v0.9.0 objective should be assumed before the repository roadmap is re-inspected.
