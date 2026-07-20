@@ -41,6 +41,16 @@ class ProjectWindow(Protocol):
         Ask the user to select a project folder.
         """
 
+    def request_project_initialization(
+        self,
+        project_info: ProjectInfo,
+    ) -> ProjectInfo | None:
+        """
+        Display the project initialization form.
+
+        Return confirmed project information or None when canceled.
+        """
+
     def show_information(self, title: str, message: str) -> None:
         """
         Display an informational message dialog.
@@ -244,7 +254,7 @@ class ProjectController:
 
     def initialize_project(self) -> None:
         """
-        Initialize the currently opened project for ForgeBud.
+        Collect metadata and initialize the currently opened project.
         """
         if self._project_path is None:
             self._window.show_information(
@@ -253,10 +263,33 @@ class ProjectController:
             )
             return
 
-        ProjectService.initialize(
-            self._project_path,
-            self._create_project_info(),
+        initial_info = self._create_project_info()
+        confirmed_info = (
+            self._window.request_project_initialization(
+                initial_info
+            )
         )
+
+        if confirmed_info is None:
+            self._window.show_status(
+                "Project initialization canceled."
+            )
+            return
+
+        try:
+            ProjectService.initialize(
+                self._project_path,
+                confirmed_info,
+            )
+        except ValueError as error:
+            self._window.show_information(
+                "Project Initialization",
+                str(error),
+            )
+            self._window.show_status(
+                "Project initialization failed."
+            )
+            return
 
         SettingsService.add_recent_project(self._project_path)
         self.refresh_recent_projects()
@@ -279,9 +312,7 @@ class ProjectController:
         ):
             return
 
-        project_summary = ProjectSummary(
-            markdown=markdown
-        )
+        project_summary = ProjectSummary(markdown=markdown)
 
         try:
             ProjectSummaryService.save(
@@ -453,9 +484,7 @@ class ProjectController:
             self._project_path
         )
 
-        self._window.set_project_summary(
-            project_summary
-        )
+        self._window.set_project_summary(project_summary)
         self._window.enable_project_summary_editing()
 
     def refresh_current_task(self) -> None:
@@ -601,12 +630,18 @@ class ProjectController:
 
     def _create_project_info(self) -> ProjectInfo:
         """
-        Create initial metadata for the current project.
+        Create initial metadata for the initialization form.
         """
+        repository = ""
+
+        if GitService.is_repository(self._project_path):
+            repository = str(self._project_path.resolve())
+
         return ProjectInfo(
             name=self._project_path.name,
             version="0.1.0",
             description="",
-            language="Python",
-            framework="Unknown",
+            language="",
+            framework="",
+            repository=repository,
         )

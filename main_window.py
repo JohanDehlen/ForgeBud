@@ -1,4 +1,5 @@
 from PySide6.QtWidgets import (
+    QDialog,
     QFileDialog,
     QGridLayout,
     QHBoxLayout,
@@ -24,6 +25,7 @@ from widgets.current_task_manager import (
 )
 from widgets.decisions_manager import DecisionsManagerWidget
 from widgets.project_dashboard import ProjectDashboardWidget
+from widgets.project_initializer import ProjectInitializerDialog
 from widgets.project_panel import ProjectPanel
 from widgets.project_summary_manager import (
     ProjectSummaryManagerWidget,
@@ -165,6 +167,25 @@ class MainWindow(QMainWindow):
             self,
             "Open Project",
         )
+
+    def request_project_initialization(
+        self,
+        project_info: ProjectInfo,
+    ) -> ProjectInfo | None:
+        """
+        Display the initialization dialog and return confirmed state.
+
+        Returns None when the developer cancels.
+        """
+        dialog = ProjectInitializerDialog(
+            project_info,
+            self,
+        )
+
+        if dialog.exec() != QDialog.DialogCode.Accepted:
+            return None
+
+        return dialog.project_info()
 
     def show_information(self, title: str, message: str) -> None:
         """

@@ -3,7 +3,7 @@ ForgeBud
 
 Project service.
 
-Responsible for creating and maintaining the
+Responsible for validating, creating, and maintaining
 ForgeBud project metadata.
 
 Project Structure
@@ -152,20 +152,27 @@ Add project-specific coding rules below this section.
         """
         Initialize a project for ForgeBud.
 
-        Existing project-memory documents are preserved.
+        Project metadata is validated and normalized before any
+        filesystem changes occur. Existing project-memory documents
+        are preserved.
         """
+        normalized_info = cls._normalize_project_info(info)
+
         project_path = Path(project_path)
         fb_folder = project_path / cls.FORGEBUD_FOLDER
 
         FileService.create_directory(fb_folder)
-        cls.save(project_path, info)
+        cls._write_project_info(
+            fb_folder,
+            normalized_info,
+        )
 
         for filename, contents in cls.DEFAULT_FILES.items():
-            file = fb_folder / filename
+            file_path = fb_folder / filename
 
-            if not file.exists():
+            if not FileService.exists(file_path):
                 FileService.write_text(
-                    file,
+                    file_path,
                     contents,
                 )
 
@@ -176,21 +183,17 @@ Add project-specific coding rules below this section.
         info: ProjectInfo,
     ) -> None:
         """
-        Save project.json.
+        Validate, normalize, and save project.json.
         """
+        normalized_info = cls._normalize_project_info(info)
+
         project_path = Path(project_path)
         fb_folder = project_path / cls.FORGEBUD_FOLDER
 
         FileService.create_directory(fb_folder)
-
-        project_file = fb_folder / cls.PROJECT_FILE
-
-        project_file.write_text(
-            json.dumps(
-                asdict(info),
-                indent=4,
-            ),
-            encoding="utf-8",
+        cls._write_project_info(
+            fb_folder,
+            normalized_info,
         )
 
     @classmethod
@@ -209,13 +212,11 @@ Add project-specific coding rules below this section.
             / cls.PROJECT_FILE
         )
 
-        if not project_file.exists():
+        if not FileService.exists(project_file):
             return ProjectInfo()
 
         data = json.loads(
-            project_file.read_text(
-                encoding="utf-8"
-            )
+            FileService.read_text(project_file)
         )
 
         return ProjectInfo(**data)
@@ -230,8 +231,100 @@ Add project-specific coding rules below this section.
         """
         project_path = Path(project_path)
 
-        return (
+        return FileService.exists(
             project_path
             / cls.FORGEBUD_FOLDER
             / cls.PROJECT_FILE
-        ).exists()
+        )
+
+    @classmethod
+    def _normalize_project_info(
+        cls,
+        info: ProjectInfo,
+    ) -> ProjectInfo:
+        """
+        Validate project metadata and return normalized state.
+
+        Raises:
+            ValueError: If the supplied project information is invalid.
+        """
+        if not isinstance(info, ProjectInfo):
+            raise ValueError(
+                "Project information must be a ProjectInfo instance."
+            )
+
+        string_fields = {
+            "name": info.name,
+            "version": info.version,
+            "description": info.description,
+            "language": info.language,
+            "framework": info.framework,
+            "repository": info.repository,
+            "created_by": info.created_by,
+            "forgebud_version": info.forgebud_version,
+        }
+
+        normalized_fields: dict[str, str] = {}
+
+        for field_name, value in string_fields.items():
+            if not isinstance(value, str):
+                display_name = field_name.replace("_", " ")
+                raise ValueError(
+                    f"Project {display_name} must be a string."
+                )
+
+            normalized_fields[field_name] = value.strip()
+
+        if not normalized_fields["name"]:
+            raise ValueError("Project name is required.")
+
+        if not normalized_fields["version"]:
+            raise ValueError("Project version is required.")
+
+        if not isinstance(info.assistant_rules, list):
+            raise ValueError(
+                "Project assistant rules must be a list of strings."
+            )
+
+        normalized_rules: list[str] = []
+
+        for rule in info.assistant_rules:
+            if not isinstance(rule, str):
+                raise ValueError(
+                    "Every project assistant rule must be a string."
+                )
+
+            normalized_rules.append(rule.strip())
+
+        return ProjectInfo(
+            name=normalized_fields["name"],
+            version=normalized_fields["version"],
+            description=normalized_fields["description"],
+            language=normalized_fields["language"],
+            framework=normalized_fields["framework"],
+            repository=normalized_fields["repository"],
+            created_by=normalized_fields["created_by"],
+            forgebud_version=normalized_fields[
+                "forgebud_version"
+            ],
+            assistant_rules=normalized_rules,
+        )
+
+    @classmethod
+    def _write_project_info(
+        cls,
+        fb_folder: Path,
+        info: ProjectInfo,
+    ) -> None:
+        """
+        Write normalized project information to project.json.
+        """
+        project_file = fb_folder / cls.PROJECT_FILE
+
+        FileService.write_text(
+            project_file,
+            json.dumps(
+                asdict(info),
+                indent=4,
+            ),
+        )

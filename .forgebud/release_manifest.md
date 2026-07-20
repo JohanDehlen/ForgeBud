@@ -2,41 +2,39 @@
 
 ## Release
 
-Version: **v0.8.0**
+Version: **v0.9.0**
 
-Name: **Project Summary**
+Name: **Better Project Initialization**
 
-Status: **Released**
+Status: **Ready for Commit**
 
 ---
 
 # Goal
 
-Introduce managed Project Summary support so ForgeBud can create, load, display, edit, and persist concise project summaries stored in `.forgebud/project_summary.md`, while preserving the existing layered architecture and all existing functionality.
+Replace the one-click initialization workflow with a guided initialization dialog that collects project metadata before creating the ForgeBud project, while preserving the existing layered architecture and all current functionality.
 
 ---
 
 # Files Added
 
-* `models/project_summary.py`
-* `services/project_summary_service.py`
-* `widgets/project_summary_manager.py`
+- `widgets/project_initializer.py`
 
 ---
 
 # Files Modified
 
-* `services/project_service.py`
-* `controllers/project_controller.py`
-* `main_window.py`
+- `services/project_service.py`
+- `controllers/project_controller.py`
+- `main_window.py`
 
 ---
 
 # Files Updated During Release Documentation
 
-* `.forgebud/PROJECT_STATE.md`
-* `.forgebud/current_task.md`
-* `.forgebud/release_manifest.md`
+- `.forgebud/PROJECT_STATE.md`
+- `.forgebud/current_task.md`
+- `.forgebud/release_manifest.md`
 
 ---
 
@@ -50,32 +48,46 @@ None.
 
 ## Compilation
 
-* Project Summary model compiled successfully.
-* Project Summary service compiled successfully.
-* Updated Project Service compiled successfully.
-* Project Summary widget compiled successfully.
-* Updated Project Controller compiled successfully.
-* Updated MainWindow compiled successfully.
-* Full project compilation passed.
+- Project Service compiled successfully.
+- Project Controller compiled successfully.
+- MainWindow compiled successfully.
+- Project Initializer dialog compiled successfully.
+- Full project compilation passed.
 
 ## Runtime Validation
 
 Verified successfully:
 
-* Application starts without exceptions.
-* Project Summary Manager appears correctly.
-* Four project-memory managers display in a 2×2 grid.
-* Existing initialized projects without `project_summary.md` load valid empty editable state.
-* Saving creates `project_summary.md`.
-* Saved project summaries reload correctly.
-* Newly initialized projects receive a starter project-summary document.
-* Existing project-summary documents are preserved.
-* Current Task Manager remains functional.
-* Decisions Manager remains functional.
-* Coding Standards Manager remains functional.
-* Dashboard remains functional.
-* Recent-project support remains functional.
-* Project initialization remains functional.
+- Application starts without exceptions.
+- Initialization dialog opens correctly.
+- Project metadata is pre-populated.
+- Description, language, framework, and version are editable.
+- Repository path is detected correctly.
+- Successful initialization creates `.forgebud`.
+- Project metadata is saved correctly.
+- Project reloads automatically after initialization.
+- Dashboard displays updated project metadata.
+- Project panel displays updated project metadata.
+- Project-memory documents are created correctly.
+- Existing project-memory documents remain protected.
+
+## Cancellation
+
+Verified successfully:
+
+- Cancel closes the dialog.
+- No `.forgebud` directory is created.
+- No project files are written.
+
+## Validation
+
+Verified successfully:
+
+- Blank project names rejected.
+- Whitespace-only project names rejected.
+- Blank versions rejected.
+- Whitespace-only versions rejected.
+- Invalid submissions create no project files.
 
 ---
 
@@ -83,23 +95,23 @@ Verified successfully:
 
 Verified.
 
-* Controllers coordinate workflows.
-* Services perform validation and persistence.
-* Widgets display state and emit signals.
-* Models contain state only.
-* MainWindow owns UI composition only.
-
-The 2×2 project-memory layout is a presentation improvement only and does not introduce a new architectural pattern.
+- Controllers coordinate workflows.
+- Services validate, normalize, and persist data.
+- Widgets collect and display presentation state.
+- Models contain state only.
+- MainWindow owns UI composition and dialog presentation.
 
 ---
 
 # Release Notes
 
-This release extends ForgeBud's managed project-memory system with Project Summary support.
+This release significantly improves the ForgeBud initialization experience.
 
-Projects can now maintain an editable Markdown summary describing their purpose, technology, intended users, current development state, and important context. The summary is stored in `.forgebud/project_summary.md`, is created automatically for newly initialized projects, and is fully supported for existing projects that do not yet contain the document.
+Instead of immediately creating project files, ForgeBud now presents a dedicated initialization dialog where developers can review and complete project metadata before initialization begins.
 
-The project-memory workspace has also been reorganized into a 2×2 grid, allowing all managed project documents to remain visible and usable.
+Project metadata is validated and normalized before any filesystem changes occur. Initialization can be safely cancelled without creating a `.forgebud` directory, and invalid metadata is rejected before project files are written.
+
+Successful initialization automatically reloads the project and refreshes the dashboard and all project-memory managers.
 
 ---
 
@@ -119,23 +131,14 @@ Runtime Validation Passed
 
 Documentation Synchronized
 
-Release Committed
+Ready for Commit
 
-Release Pushed
-
-Repository Synchronized
+Ready for Push
 
 ---
 
 # Next Step
 
-The v0.8.0 release is complete.
+Commit the completed v0.9.0 release and push it to GitHub.
 
-Before beginning v0.9.0:
-
-1. Re-read every document in `.forgebud`.
-2. Inspect `.forgebud/ROADMAP.md`.
-3. Determine the next incomplete roadmap objective.
-4. Create a complete release specification.
-5. Inspect every required implementation dependency.
-6. Continue with one implementation file at a time.
+After the repository is synchronized, re-read every document in `.forgebud`, inspect the roadmap, determine the next incomplete milestone, and create the next release specification before implementation begins.
