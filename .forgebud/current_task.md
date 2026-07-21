@@ -2,92 +2,102 @@
 
 ## Active Release
 
-No active implementation release.
+**v0.11.0 — Engineering Context Foundation**
+
+Status:
+
+Documentation Synchronization
 
 ---
 
-# Current State
+# Current Objective
 
-The v0.10.0 **Project Validation** release has been completed.
+Complete the Engineering Context Foundation release.
 
-Implementation, compilation, and runtime validation have all passed.
+Implementation is complete.
 
-The repository is currently being synchronized before the next release begins.
-
----
-
-# Last Completed Release
-
-Version: **v0.10.0**
-
-Name: **Project Validation**
-
-Completed:
-
-- Project validation model
-- Project validation service
-- Dashboard integration
-- Controller integration
-- Required document validation
-- Metadata validation
-- Invalid JSON detection
-- Missing document detection
-- Blank required metadata detection
-- Optional metadata warnings
-- Uninitialized project handling
+The repository is currently being synchronized before commit and push.
 
 ---
 
-# Validation Results
+# Completed During This Release
 
-Verified successfully:
-
-- Healthy managed project
-- Missing project-memory document
-- Invalid JSON metadata
-- Blank project name
-- Blank project version
-- Optional metadata warnings
-- Uninitialized project
-
-All validation tests passed.
+- Introduced the provider-independent `EngineeringContext` model.
+- Added `EngineeringContextService`.
+- Added `EngineeringContextSerializer`.
+- Refactored architecture away from AI-specific terminology.
+- Preserved deterministic Markdown serialization.
+- Preserved repository-state integration.
+- Preserved project-memory integration.
+- Preserved project validation integration.
+- Added temporary compatibility aliases.
+- Removed the obsolete `ContextGenerationService`.
+- Successfully generated Engineering Context from Voiceanator.
+- Successfully serialized Engineering Context into Markdown.
+- Passed full project compilation.
 
 ---
 
-# Repository Status
+# Validation Completed
 
-Current release documentation is being synchronized.
+Verified:
 
-Remaining work:
+- Engineering Context model
+- Engineering Context service
+- Engineering Context serializer
+- Compatibility aliases
+- Repository-wide deprecated-name search
+- Voiceanator context generation
+- Markdown serialization
+- Full ForgeBud compilation
 
-1. Update `release_manifest.md`.
-2. Final compilation.
-3. Commit.
-4. Push.
+No runtime failures occurred.
+
+---
+
+# Remaining Tasks
+
+1. Update `.forgebud/release_manifest.md`.
+2. Update `.forgebud/ARCHITECTURE.md` with the Engineering Context layer.
+3. Review all local changes.
+4. Commit the release.
+5. Push to GitHub.
+
+---
+
+# Architecture
+
+ForgeBud now separates concerns into five layers:
+
+1. Repository
+2. Project Memory
+3. Engineering Context
+4. Consumers
+5. Presentation
+
+The Engineering Context is the canonical provider-independent representation of project knowledge.
+
+Future AI providers, documentation generators, automation, reporting, and analytics will consume this context rather than reading project files directly.
 
 ---
 
 # Next Release
 
-No implementation has started.
+After this release is synchronized:
 
-After repository synchronization:
-
-1. Read every document in `.forgebud`.
-2. Inspect `ROADMAP.md`.
-3. Determine the next incomplete milestone.
-4. Produce the next release specification.
+1. Re-read every `.forgebud` document.
+2. Inspect the roadmap.
+3. Select the next incomplete milestone objective.
+4. Produce a release specification.
 5. Inspect implementation dependencies.
-6. Generate one complete file at a time.
-7. Compile after every file.
-8. Validate the completed release.
-9. Synchronize documentation.
-10. Commit and push.
+6. Continue the one-file workflow.
+
+No new implementation work has started.
 
 ---
 
 # Notes
 
-ForgeBud now has a complete read-only project validation subsystem that provides project health reporting for all managed projects.
+The terminology refactoring from **AI Context** to **Engineering Context** establishes a provider-independent architecture before AI-provider integration begins.
 
-This subsystem forms the foundation for future AI-assisted development features by ensuring project memory and metadata are valid before AI context is generated.
+This provides a stable foundation for the remainder of Milestone 3.

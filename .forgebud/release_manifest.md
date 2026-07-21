@@ -2,56 +2,79 @@
 
 ## Release
 
-Version: **v0.10.0**
+Version: **v0.11.0**
 
-Name: **Project Validation**
+Name: **Engineering Context Foundation**
 
-Status: **Released**
+Status: **Completed**
 
 ---
 
 # Goal
 
-Introduce a read-only validation subsystem that verifies the integrity of ForgeBud-managed projects before development begins.
+Establish the provider-independent Engineering Context as the canonical representation of a software project's engineering state.
+
+This release replaces AI-specific terminology with architecture that supports any current or future consumer.
 
 ---
 
 # Features Delivered
 
-- Project validation model
-- Project validation service
-- Dashboard validation integration
-- Controller validation integration
-- Read-only validation workflow
-- Required project-memory document validation
-- Project metadata validation
-- Invalid JSON detection
-- Blank required metadata detection
-- Optional metadata warnings
-- Project health reporting
+- EngineeringContext model
+- EngineeringContextService
+- EngineeringContextSerializer
+- Provider-independent engineering terminology
+- Repository-state integration
+- Project-memory aggregation
+- Deterministic Markdown serialization
+- Compatibility aliases for previous AIContext names
+- End-to-end Engineering Context generation
 
 ---
 
 # Files Added
 
-- `models/project_validation.py`
-- `services/project_validation_service.py`
+- `models/engineering_context.py`
+- `services/engineering_context_service.py`
+- `services/engineering_context_serializer.py`
 
 ---
 
 # Files Modified
 
-- `models/project_dashboard.py`
-- `controllers/project_controller.py`
-- `widgets/project_dashboard.py`
+- `models/ai_context.py`
+- `services/context_serializer_service.py`
 
 ---
 
-# Documentation Updated
+# Files Removed
 
-- `.forgebud/PROJECT_STATE.md`
-- `.forgebud/current_task.md`
-- `.forgebud/release_manifest.md`
+- `services/context_generation_service.py`
+
+---
+
+# Architecture
+
+ForgeBud now uses the following knowledge pipeline:
+
+```
+Repository
+      │
+      ▼
+Project Memory
+      │
+      ▼
+Engineering Context
+      │
+      ├── AI Providers
+      ├── Documentation
+      ├── Reports
+      ├── Search
+      ├── Automation
+      └── Future Consumers
+```
+
+The Engineering Context is now the single provider-independent representation of project knowledge.
 
 ---
 
@@ -67,42 +90,50 @@ Passed.
 
 Verified:
 
-- Healthy project
-- Missing project-memory document
-- Invalid JSON metadata
-- Blank required metadata
-- Optional metadata warnings
-- Uninitialized project
-- Dashboard health reporting
-
-No crashes occurred.
-
----
-
-# Architecture
-
-Verified.
-
-Validation is completely read-only.
-
-- Models store validation state.
-- Services perform validation.
-- Controllers coordinate validation.
-- Widgets display validation results.
-- MainWindow remains responsible for presentation.
+- EngineeringContext construction
+- EngineeringContext serialization
+- Repository metadata
+- Project Summary
+- Current Task
+- Coding Standards
+- Engineering Decisions
+- Release Manifest
+- Project Validation
+- Voiceanator end-to-end context generation
+- Repository-wide deprecated-name search
+- Full ForgeBud compilation
 
 ---
 
-# Design Improvement
+# Compatibility
 
-During testing the validator was refined to distinguish between:
+Temporary compatibility modules remain:
 
-- Standard ForgeBud-managed projects
-- ForgeBud's own development repository
+- `models/ai_context.py`
+- `services/context_serializer_service.py`
 
-Only documents created for every managed project are now treated as required.
+These preserve backwards compatibility while the project transitions to Engineering Context terminology.
 
-This makes validation suitable for all ForgeBud projects, not only ForgeBud itself.
+They may be removed during a future cleanup release.
+
+---
+
+# Design Decisions
+
+During implementation the project architecture evolved.
+
+The former concept of an **AI Context** was generalized into an **Engineering Context**.
+
+This better reflects the long-term architecture because the same project knowledge can be consumed by:
+
+- AI providers
+- Documentation
+- Analytics
+- Search
+- Reporting
+- Automation
+
+without changing the Engineering Context itself.
 
 ---
 
@@ -130,10 +161,12 @@ Ready for Push
 
 # Next Release
 
-After this release is committed and pushed:
+Following repository synchronization:
 
 1. Re-read every `.forgebud` document.
 2. Inspect the roadmap.
-3. Determine the next incomplete milestone.
-4. Create the next release specification.
-5. Begin implementation following the one-file workflow.
+3. Select the next Milestone 3 objective.
+4. Produce the next release specification.
+5. Continue the one-file workflow.
+
+The Engineering Context foundation is complete.

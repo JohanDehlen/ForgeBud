@@ -1,451 +1,384 @@
 # ForgeBud Architecture
 
-Version 1.0
+Version 2.0
 
 ---
 
 # Purpose
 
-This document defines the software architecture of ForgeBud.
+This document describes the architectural design of ForgeBud.
 
-Unlike the Constitution, this document may evolve as the application grows.
+It defines how the application is organized, how responsibilities are separated, and how future features should integrate with the existing system.
 
-Every architectural decision should remain consistent with the principles defined in FORGEBUD_PRINCIPLES.md.
+This document describes *how* ForgeBud is built.
 
----
-
-# High-Level Architecture
-
-ForgeBud follows a layered architecture.
-
-```
-                User
-
-                 │
-
-                 ▼
-
-          MainWindow (UI)
-
-                 │
-
-                 ▼
-
-          Controllers
-
-                 │
-
-      ┌──────────┼──────────┐
-
-      ▼          ▼          ▼
-
-  Project     Prompt      AI
-
- Controller  Controller Controller
-
-      │          │          │
-
-      └──────────┼──────────┘
-
-                 ▼
-
-             Services
-
-                 │
-
-      ┌──────────┼──────────┐
-
-      ▼          ▼          ▼
-
- FileService GitService ContextService
-
-                 │
-
-                 ▼
-
-              Models
-
-                 │
-
-                 ▼
-
-         Project Metadata
-```
+The roadmap describes *what* ForgeBud will become.
 
 ---
 
-# Layer Responsibilities
+# Architectural Principles
 
-## MainWindow
+ForgeBud follows several fundamental principles.
 
-Responsibilities
+## Repository First
 
-- Own the application's UI.
-- Manage widgets.
-- Connect signals.
-- Delegate work.
+The software project is always the source of truth.
 
-MainWindow should contain almost no business logic.
+ForgeBud never invents project state.
 
----
-
-## Widgets
-
-Widgets display information.
-
-Examples
-
-- ProjectPanel
-- StatusBar
-- Future PromptPanel
-- Future AIResponsePanel
-
-Widgets should never:
-
-- read Git
-- read files
-- call AI providers
-
-Widgets display data only.
+Everything shown by ForgeBud is derived from the repository.
 
 ---
 
-## Controllers
+## Read Before Write
 
-Controllers coordinate behaviour.
+All services inspect existing project state before making changes.
 
-Examples
-
-ProjectController
-
-PromptController
-
-AIController
-
-WorkspaceController
-
-Controllers decide WHAT happens.
-
-They do not perform the work themselves.
+ForgeBud never blindly overwrites project data.
 
 ---
 
-## Services
+## Separation of Responsibilities
+
+Every layer has one responsibility.
+
+Models store data.
 
 Services perform work.
 
-Examples
+Controllers coordinate workflows.
 
-GitService
+Widgets display information.
 
-FileService
-
-ProjectService
-
-ContextService
-
-SettingsService
-
-Future
-
-PromptService
-
-ValidationService
-
-AIService
-
-Services should never own UI.
+MainWindow composes the UI.
 
 ---
 
-## Models
+## Provider Independence
 
-Models represent data.
+ForgeBud is independent of any AI provider.
 
-Examples
+ChatGPT, Claude, Gemini, Ollama, OpenRouter, and future providers are consumers of Engineering Context.
 
-ProjectInfo
-
-ReleaseManifest
-
-ContextSummary
-
-AIResponse
-
-Models contain no business logic.
+The application architecture must never depend upon a specific AI.
 
 ---
 
-# Project Structure
+# Layered Architecture
+
+ForgeBud consists of five major layers.
 
 ```
-ForgeBud/
-
-    config/
-
-    controllers/
-
-    models/
-
-    services/
-
-    widgets/
-
-    resources/
-
-    tests/
-
-    version.py
-
-    main.py
-
-    main_window.py
+Repository
+      │
+      ▼
+Project Memory
+      │
+      ▼
+Engineering Context
+      │
+      ▼
+Consumers
+      │
+      ▼
+Presentation
 ```
 
 ---
 
-# Project Metadata
+# Layer 1 — Repository
 
-Every managed project contains:
+The repository is the permanent source of truth.
 
-```
-.forgebud/
+It contains:
 
-    project.json
+- Source code
+- Project files
+- Git history
+- ForgeBud project memory
 
-    FORGEBUD_PRINCIPLES.md
-
-    ARCHITECTURE.md
-
-    ROADMAP.md
-
-    PROJECT_STATE.md
-
-    assistant_rules.md
-
-    decisions.md
-
-    current_task.md
-
-    release_manifest.md
-```
-
-This directory represents the permanent memory of the project.
+No layer above the repository owns project state.
 
 ---
 
-# Data Flow
+# Layer 2 — Project Memory
 
-Typical workflow
+Project Memory stores long-term engineering knowledge.
 
-```
-User
+Current documents include:
 
-↓
+- Project Summary
+- Current Task
+- Coding Standards
+- Engineering Decisions
+- Release Manifest
 
-Widget
-
-↓
-
-MainWindow
-
-↓
-
-Controller
-
-↓
-
-Service
-
-↓
-
-Model
-
-↓
-
-Controller
-
-↓
-
-Widget
-
-↓
-
-User
-```
-
-Data should always flow downward through the architecture.
-
-Widgets should not bypass controllers.
+These documents describe the project independently of any AI conversation.
 
 ---
 
-# Dependency Rules
+# Layer 3 — Engineering Context
 
-Allowed
+The Engineering Context is the canonical representation of project knowledge.
 
-MainWindow → Controllers
+It combines:
 
-Controllers → Services
+- Project metadata
+- Repository context
+- Project Summary
+- Current Task
+- Coding Standards
+- Engineering Decisions
+- Release Manifest
+- Project Validation
 
-Controllers → Models
+Engineering Context is read-only.
 
-Services → Models
+It contains no business logic.
 
-Forbidden
-
-Widgets → Services
-
-Widgets → Git
-
-Widgets → AI
-
-Services → Widgets
-
-Models → Services
-
-Models → Widgets
-
-Circular dependencies
+It is derived entirely from repository state.
 
 ---
 
-# AI Architecture
+# Layer 4 — Consumers
 
-ForgeBud should support multiple AI providers.
+Consumers use Engineering Context without modifying it.
 
-The application should never depend on a single provider.
+Current consumers include:
 
-Future providers include
+- Markdown serialization
 
+Future consumers include:
+
+- Prompt generation
 - ChatGPT
 - Claude
 - Gemini
-- Grok
-- DeepSeek
-- OpenRouter
 - Ollama
+- OpenRouter
+- Documentation
+- Reports
+- Search
+- Analytics
+- Automation
 
-Changing providers should not require changes elsewhere in the application.
-
----
-
-# Git Architecture
-
-Git remains the source of truth.
-
-ForgeBud enhances Git.
-
-ForgeBud never replaces Git.
-
-GitService should remain read-only unless a future feature explicitly requires write operations.
+All consumers receive the same Engineering Context.
 
 ---
 
-# Project Memory
+# Layer 5 — Presentation
 
-The project owns its engineering knowledge.
+Presentation includes:
 
-The AI conversation is temporary.
+- Widgets
+- MainWindow
+- Dialogs
+- Status displays
+- Future dashboards
 
-The project documentation is permanent.
+Presentation never constructs Engineering Context.
 
-ForgeBud should always generate AI context from project memory rather than conversation history.
+Presentation requests information from controllers.
 
 ---
 
-# Prompt Generation
+# Controllers
 
-The Prompt Builder should generate context using:
+Controllers coordinate workflows.
 
-- Project metadata
-- Current task
-- Architecture
-- Roadmap
-- Changed files
-- Assistant rules
-- Release history
+Responsibilities include:
 
-Prompt generation should never rely on memory from previous chats.
+- Project initialization
+- Project loading
+- Dashboard updates
+- Validation
+- Future context generation
+- Future AI workflows
+
+Controllers contain workflow logic but not UI code.
+
+---
+
+# Services
+
+Services perform all business logic.
+
+Typical services include:
+
+- ProjectService
+- GitService
+- ValidationService
+- EngineeringContextService
+
+Services may depend upon other services.
+
+Services do not depend upon widgets.
+
+---
+
+# Models
+
+Models represent state only.
+
+Examples include:
+
+- ProjectInfo
+- ProjectSummary
+- CurrentTask
+- CodingStandards
+- Decisions
+- ReleaseManifest
+- ProjectValidation
+- EngineeringContext
+
+Models contain no workflow logic.
+
+---
+
+# Widgets
+
+Widgets display information.
+
+Widgets emit user actions.
+
+Widgets do not modify project state directly.
+
+---
+
+# MainWindow
+
+MainWindow composes the user interface.
+
+Responsibilities include:
+
+- Window layout
+- Dock management
+- Toolbar management
+- Menu actions
+- Widget coordination
+
+Business logic belongs elsewhere.
+
+---
+
+# Context Generation
+
+Engineering Context generation follows this workflow:
+
+```
+Repository
+        │
+        ▼
+Project Services
+        │
+        ▼
+EngineeringContextService
+        │
+        ▼
+EngineeringContext
+        │
+        ▼
+EngineeringContextSerializer
+```
+
+Generation is always read-only.
 
 ---
 
 # Validation
 
-Before AI-generated code is applied:
+Validation occurs before future AI-assisted workflows.
 
-- Validate replacement files.
-- Verify project structure.
-- Check imports.
-- Detect placeholders.
-- Detect incomplete files.
-- Verify architecture rules.
-- Create backups when appropriate.
+Validation verifies:
+
+- Project initialization
+- Required project-memory documents
+- Metadata
+- Repository state
+
+Validation never modifies the project.
 
 ---
 
-# Future Architecture
+# AI Architecture
 
-Planned components
+ForgeBud does not communicate directly with AI models.
 
-Controllers
+Future provider layers will receive Engineering Context.
 
-- ProjectController
-- PromptController
-- AIController
-- WorkspaceController
+Example:
 
-Services
+```
+EngineeringContext
+        │
+        ▼
+Prompt Builder
+        │
+        ▼
+Provider Layer
+        │
+ ┌──────┼────────┬────────┬────────┐
+ │      │        │        │
+GPT   Claude   Gemini  Ollama  OpenRouter
+```
 
-- PromptService
-- ValidationService
-- AIService
-- BackupService
-- ReleaseService
-- WorkspaceService
+Providers are interchangeable.
+
+---
+
+# Dependency Rules
+
+Allowed dependencies:
 
 Widgets
 
-- PromptPanel
-- AIResponsePanel
-- ProjectDashboard
-- ReleasePanel
-- ArchitectureViewer
+↓
+
+Controllers
+
+↓
+
+Services
+
+↓
+
+Models
+
+Services may use other services.
+
+Models never depend upon services.
+
+Widgets never depend upon services directly unless explicitly designed for passive display.
 
 ---
 
-# Scalability
+# Future Extensions
 
-ForgeBud should scale from small utilities to large enterprise software projects without architectural changes.
+Future milestones may add:
 
-The architecture should support:
+- Multiple serializers
+- JSON export
+- XML export
+- Token estimation
+- AI provider abstraction
+- Safe response analysis
+- Change application
+- Automation
+- Plugin architecture
 
-- thousands of source files
-- multiple programming languages
-- multiple AI providers
-- multiple repositories
-- multiple workspaces
-
----
-
-# Architectural Goals
-
-Every architectural decision should improve at least one of the following:
-
-- Maintainability
-- Readability
-- Simplicity
-- Reliability
-- Testability
-- Extensibility
-- Consistency
-
-If a change does not improve one of these qualities, it should be reconsidered.
+These should build upon Engineering Context rather than bypassing it.
 
 ---
 
-# Final Architectural Principle
+# Definition of Success
 
-The architecture exists to make future development easier.
+ForgeBud succeeds architecturally when:
 
-Every release should leave the project easier to understand than it was before.
+- Repository is always the source of truth.
+- Engineering Context completely represents project knowledge.
+- Every consumer uses the same Engineering Context.
+- AI providers remain interchangeable.
+- Business logic remains separated from presentation.
+- New features can be added without architectural redesign.
+
+The architecture should remain understandable, extensible, and provider-independent for many years.

@@ -1,38 +1,63 @@
 # ForgeBud Roadmap
 
-Version 1.0
+Version 2.0
 
 ---
 
 # Purpose
 
-This roadmap defines the long-term direction of ForgeBud.
+This roadmap defines the long-term evolution of ForgeBud.
 
-It is a living document and may evolve as priorities change.
-
-The roadmap describes *what* ForgeBud should become, not the implementation details.
+It describes what ForgeBud will become over time rather than the detailed implementation of each release.
 
 Implementation details belong in ARCHITECTURE.md.
+
+This roadmap is intended to guide development for many years while remaining flexible enough to evolve as new capabilities are discovered.
 
 ---
 
 # Vision
 
-ForgeBud will become an AI-powered software engineering workspace that understands software projects, preserves engineering knowledge, coordinates AI-assisted development, and provides a safe workflow for applying AI-generated code.
+ForgeBud is an AI-assisted software engineering workspace.
+
+Its purpose is to preserve project knowledge, coordinate software development, and enable developers to work with any AI without repeatedly explaining their projects.
 
 ForgeBud is intended to become the first application opened when beginning work on any software project.
 
 ---
 
-# Guiding Principle
+# Core Principles
 
-Every milestone should make software development:
+Every release should make software development:
 
 - Faster
 - Safer
+- Easier
 - More consistent
-- Easier to understand
-- Easier to maintain
+- More maintainable
+- Less repetitive
+- Better documented
+
+Every release must improve one or more of these principles.
+
+---
+
+# Long-Term Philosophy
+
+ForgeBud is **not** an IDE.
+
+ForgeBud is **not** a code generator.
+
+ForgeBud is **not** a Git client.
+
+ForgeBud is the intelligent engineering layer that connects:
+
+- Developers
+- AI systems
+- Project knowledge
+- Software engineering workflow
+
+The repository—not the AI conversation—is always the source of truth.
 
 ---
 
@@ -41,6 +66,10 @@ Every milestone should make software development:
 Status
 
 ✅ COMPLETE
+
+Goal
+
+Create a stable application framework.
 
 Objectives
 
@@ -55,12 +84,9 @@ Objectives
 - Basic project panel
 - Status bar
 
-Deliverables
+Result
 
-- Open project
-- Detect Git
-- Initialize ForgeBud
-- Read/write project metadata
+ForgeBud can initialize and manage software projects.
 
 ---
 
@@ -68,79 +94,130 @@ Deliverables
 
 Status
 
-🟡 CURRENT
+✅ COMPLETE
 
 Goal
 
-ForgeBud completely understands a software project.
+Teach ForgeBud to understand software projects.
 
 Objectives
 
-- Introduce ProjectController
-- Remove business logic from MainWindow
-- Recent Projects
-- Project Dashboard
-- Current Task Manager
-- Coding Standards
-- Release Manifest
+- ProjectController
+- Recent projects
+- Project dashboard
 - Project Summary
-- Better project initialization
+- Current Task
+- Coding Standards
+- Engineering Decisions
+- Release Manifest
+- Better initialization
 - Project validation
 
 Result
 
-ForgeBud understands the structure and current state of a software project.
+ForgeBud understands the current state of a project.
 
 ---
 
-# Milestone 3 — AI Context Builder
+# Milestone 3 — AI Context Engine
+
+Status
+
+🟡 CURRENT
 
 Goal
 
-Generate perfect AI prompts automatically.
+Generate complete AI-ready project context automatically.
 
 Objectives
 
+- AI Context Model
 - Context Generator
 - Prompt Builder
-- Clipboard support
+- Clipboard export
 - Token estimation
-- Include changed files
-- Include architecture
-- Include current task
-- Include coding standards
-- Include release manifest
+- Project summary inclusion
+- Current task inclusion
+- Coding standards inclusion
+- Engineering decisions inclusion
+- Release manifest inclusion
+- Git status inclusion
+- Project validation inclusion
 
 Result
 
-The developer no longer needs to manually explain the project to an AI.
+Developers never manually explain their projects to an AI.
 
 ---
 
-# Milestone 4 — AI Response Validation
+# Milestone 4 — AI Provider Layer
+
+Status
+
+⚪ PLANNED
 
 Goal
 
-Verify AI-generated code before it is applied.
+Support multiple AI providers through one common interface.
+
+Objectives
+
+- Provider abstraction
+- Provider configuration
+- Provider capability detection
+- Shared request format
+- Shared response format
+- Conversation abstraction
+- Provider switching
+
+Initial Providers
+
+- ChatGPT
+- Claude
+- Gemini
+- OpenRouter
+- Ollama
+
+Result
+
+ForgeBud can work with any supported AI without changing project workflows.
+
+---
+
+# Milestone 5 — AI Response Analysis
+
+Status
+
+⚪ PLANNED
+
+Goal
+
+Determine whether AI-generated responses are safe.
 
 Objectives
 
 - Response parser
 - Replacement file detection
+- Placeholder detection
 - Import validation
 - Architecture validation
-- Placeholder detection
 - Missing file detection
 - Duplicate file detection
+- Markdown validation
 - Response summary
+- Confidence scoring
 
 Result
 
-Unsafe AI responses are detected before they reach the project.
+Unsafe AI responses are detected before reaching the project.
 
 ---
 
-# Milestone 5 — Safe Apply
+# Milestone 6 — Safe Change Application
+
+Status
+
+⚪ PLANNED
 
 Goal
 
@@ -148,114 +225,154 @@ Apply AI-generated changes safely.
 
 Objectives
 
-- Automatic backups
 - Preview changes
+- Automatic backups
 - Replace files
 - Rollback
 - Git integration
-- Automatic commit option
+- Automatic commits
+- Change summaries
+- Conflict detection
 
 Result
 
-Applying AI-generated code becomes a safe, repeatable process.
+AI-generated code can be applied safely and repeatedly.
 
 ---
 
-# Milestone 6 — AI Workspace
+# Milestone 7 — AI Workspace
+
+Status
+
+⚪ PLANNED
 
 Goal
 
-Create a complete AI development environment.
+Create a complete AI-assisted development workspace.
 
 Objectives
 
 - Workspace dashboard
-- AI conversations
-- Project memory
-- Decision history
+- Project memory browser
 - Architecture viewer
 - Dependency viewer
-- Workspace search
+- Conversation history
 - Session summaries
+- Workspace search
+- Project analytics
 
 Result
 
-ForgeBud becomes the central workspace for AI-assisted software development.
+ForgeBud becomes the central application used throughout software development.
 
 ---
 
-# Milestone 7 — Multi-AI Support
+# Milestone 8 — Automation
+
+Status
+
+⚪ PLANNED
 
 Goal
 
-Support multiple AI providers.
-
-Potential Providers
-
-- ChatGPT
-- Claude
-- Gemini
-- Grok
-- DeepSeek
-- OpenRouter
-- Ollama
-
-Objectives
-
-- Provider abstraction
-- Provider settings
-- Conversation compatibility
-- Shared context generation
-
-Result
-
-Changing AI providers requires no changes to the project workflow.
-
----
-
-# Milestone 8 — Enterprise Features
+Automate repetitive engineering work.
 
 Potential Features
 
-- Multiple workspaces
-- Team projects
-- Shared project memory
-- Plugin system
-- Project analytics
-- Architecture visualization
-- Dependency graphs
-- Release dashboard
-- CI/CD integration
+- Release generation
+- Documentation synchronization
+- Context regeneration
+- Project health monitoring
+- Architecture consistency checks
+- Reminder system
+- Engineering checklists
+
+Result
+
+ForgeBud performs routine engineering tasks automatically.
 
 ---
 
-# Long-Term Goals
+# Milestone 9 — Plugin Platform
 
-ForgeBud should eventually support:
+Status
+
+⚪ PLANNED
+
+Goal
+
+Allow ForgeBud to be extended without modifying the core application.
+
+Potential Features
+
+- Plugin SDK
+- Custom validators
+- Custom project-memory documents
+- Language extensions
+- Build-system integrations
+- Third-party AI providers
+
+Result
+
+ForgeBud becomes an extensible engineering platform.
+
+---
+
+# Milestone 10 — Enterprise
+
+Status
+
+⚪ PLANNED
+
+Potential Features
+
+- Team workspaces
+- Shared project memory
+- Role-based permissions
+- Cloud synchronization
+- Project analytics
+- CI/CD integration
+- Architecture visualization
+- Dependency graphs
+- Organization dashboards
+
+Result
+
+ForgeBud scales from individual developers to engineering teams.
+
+---
+
+# Supported Languages
+
+ForgeBud should remain language independent.
+
+Initial targets:
 
 - Python
 - C#
 - Java
 - JavaScript
 - TypeScript
-- C++
 - Rust
 - Go
-
-The architecture should remain language independent.
+- C++
+- Kotlin
 
 ---
 
-# Success Criteria
+# Supported AI Providers
 
-ForgeBud succeeds when a developer can:
+ForgeBud should support:
 
-- Open a project.
-- Immediately understand its current state.
-- Generate AI context with one click.
-- Validate AI responses automatically.
-- Apply AI-generated code safely.
-- Continue development without losing project knowledge.
+- ChatGPT
+- Claude
+- Gemini
+- OpenRouter
+- Ollama
+- Grok
+- DeepSeek
+
+Additional providers should be added without architectural changes.
 
 ---
 
@@ -270,28 +387,51 @@ Planned
 
 - Figured Mind
 - Biblical Insights
-- Future SaaS products
 
-ForgeBud should ultimately become the development environment used to build all future software projects.
+Future
 
----
-
-# Guiding Philosophy
-
-ForgeBud is not a code generator.
-
-ForgeBud is not an IDE.
-
-ForgeBud is not a Git client.
-
-ForgeBud is the intelligent engineering layer that connects developers, AI, project knowledge, and software engineering workflow.
+All software created by the developer should ultimately be managed by ForgeBud.
 
 ---
 
-# Definition of Success
+# Development Rules
 
-The ultimate goal of ForgeBud is simple:
+Every release must:
 
-A developer should never again have to explain their software project to an AI.
+- Begin with repository inspection.
+- Follow the roadmap.
+- Produce a release specification.
+- Inspect dependencies before implementation.
+- Generate one complete file at a time.
+- Compile after every file.
+- Validate before completion.
+- Synchronize project documentation.
+- Commit.
+- Push.
 
-The project should explain itself.S
+The repository is always the source of truth.
+
+---
+
+# Success Criteria
+
+ForgeBud succeeds when a developer can:
+
+- Open any project.
+- Instantly understand its current state.
+- Generate complete AI context automatically.
+- Send that context to any AI.
+- Validate AI responses.
+- Apply AI-generated changes safely.
+- Preserve engineering knowledge permanently.
+- Switch AI providers without changing workflow.
+
+---
+
+# Ultimate Goal
+
+A developer should never again have to explain a software project to an AI.
+
+The project should explain itself.
+
+ForgeBud exists to make that possible.
